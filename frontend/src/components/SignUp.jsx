@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { UserInfo } from '../UserInfo';
@@ -16,7 +16,7 @@ const SignUp = () => {
           userEmail, setUserEmail
         } = useContext(UserInfo);
 
-  const nav = useNavigate(null);
+  const nav = useNavigate();
 
   const sendData = async (e) => {
     e.preventDefault();
@@ -25,20 +25,19 @@ const SignUp = () => {
           userId : userId,
           userPw : userPw,
           userNickname : userNickname,
-          userGender : userGender,
-          userAge : userAge,
-          userHeight : userHeight,
-          userWeight : userWeight,
+          userGender: userGender,
+          userAge: userAge,
+          userHeight: userHeight,
+          userWeight: userWeight,
           userEmail : userEmail
-      })
+      });
       console.log(response);
-      response.data.success
-      ? nav('/')
-      : nav('/signup')
+      response.data.success ? nav('/signin') : nav('/signup');
     } catch (error) {
       console.log(error);
     }
   }
+
   return (
     <div>
       <Form onSubmit={sendData}>
@@ -62,8 +61,24 @@ const SignUp = () => {
 
         <Form.Group className="mb-3">
           <Form.Label>Gender</Form.Label>
-          <Form.Control type="text" placeholder="Gender"
-            onChange={e => setUserGender(e.target.value)} />
+          <div>
+            <Form.Check
+              type="radio"
+              id="gender-male"
+              label="Male"
+              value="1"
+              checked={userGender === '1'}
+              onChange={e => setUserGender(e.target.value)}
+            />
+            <Form.Check
+              type="radio"
+              id="gender-female"
+              label="Female"
+              value="0"
+              checked={userGender === '0'}
+              onChange={e => setUserGender(e.target.value)}
+            />
+          </div>
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -93,10 +108,9 @@ const SignUp = () => {
         <Button variant="primary" type="submit">
           Sign Up
         </Button>
-
       </Form>
     </div>
   )
 }
 
-export default SignUp
+export default SignUp;
