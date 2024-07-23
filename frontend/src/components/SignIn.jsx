@@ -1,52 +1,59 @@
-import React, { useContext } from 'react'
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import { UserInfo } from '../UserInfo';
-import axios from '../axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext } from "react";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import { UserInfo } from "../UserInfo";
+import axios from "../axios";
+import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
-    const {userId, setUserId, userPw, setUserPw} = useContext(UserInfo)
+  const { userId, setUserId, userPw, setUserPw } = useContext(UserInfo);
 
-    const nav = useNavigate(null);
+  const nav = useNavigate(null);
 
-    const sendData = async(e)=>{
-        try{
-            e.preventDefault();
-            const response = await axios.post('/user/handleSignIn',{
-                userId : userId,
-                userPw : userPw
-            })
-            // console.log(response);
-            response.data.success
-            ? nav ('/')
-            : nav ('/signin')
-        }catch(erorr){
-            console.log(erorr);
-        }
+  const sendData = async (e) => {
+    try {
+      e.preventDefault();
+      const response = await axios.post("/user/handleSignIn", {
+        userId: userId,
+        userPw: userPw,
+      });
+      if (response.data.success) {
+        sessionStorage.setItem("sessionId", response.data.sessionId); // 세션 ID 저장
+        sessionStorage.setItem("userId", userId); // 유저 ID 저장
+        nav("/");
+      } else {
+        nav("/signin");
+      }
+    } catch (erorr) {
+      console.log(erorr);
     }
-    return (
+  };
+  return (
     <div>
-        <Form onSubmit={sendData}>
+      <Form onSubmit={sendData}>
+        <Form.Group className="mb-3">
+          <Form.Label>ID</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="ID"
+            onChange={(e) => setUserId(e.target.value)}
+          />
+        </Form.Group>
 
-            <Form.Group className="mb-3">
-                <Form.Label>ID</Form.Label>
-                <Form.Control type="text" placeholder="ID" 
-                onChange={e=>setUserId(e.target.value)}/>
-            </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="Password"
+            onChange={(e) => setUserPw(e.target.value)}
+          />
+        </Form.Group>
 
-            <Form.Group className="mb-3">
-                <Form.Label>Password</Form.Label>
-                <Form.Control type="password" placeholder="Password" 
-                onChange={e=>setUserPw(e.target.value)}/>
-            </Form.Group>
-
-            <Button variant="primary" type="submit">
-                Sign In
-            </Button>
-
-        </Form>
+        <Button variant="primary" type="submit">
+          Sign In
+        </Button>
+      </Form>
     </div>
-    )
-}
-export default SignIn
+  );
+};
+export default SignIn;
