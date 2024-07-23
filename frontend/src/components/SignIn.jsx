@@ -47,7 +47,6 @@ const SignIn = () => {
 
         </Form>
     </div>
-  )
+    )
 }
-
 export default SignIn

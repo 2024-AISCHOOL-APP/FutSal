@@ -5,15 +5,18 @@ import { Link } from 'react-router-dom';
 const Header = () => {
   return (
     <div>
-        <h1>React.js-Express.js</h1>
+        <p></p>
             <Button variant="dark">
-                <Link to='/'>HOME</Link>
+                <Link to='/' style={{ color: 'white', textDecoration: 'none' }}>HOME</Link>
             </Button>
-            <Button variant="warning">
-                <Link to='/signin'>SignIn</Link>
+            <Button variant="dark">
+                <Link to='/signin' style={{ color: 'white', textDecoration: 'none' }}>SignIn</Link>
             </Button>
-            <Button variant="success">
-                <Link to='/signup'>SignUp</Link>
+            <Button variant="dark">
+                <Link to='/signup'style={{ color: 'white', textDecoration: 'none' }}>SignUp</Link>
+            </Button>
+            <Button variant="dark">
+                <Link to='/board' style={{ color: 'white', textDecoration: 'none' }}>Board</Link>
             </Button>
     </div>
   )

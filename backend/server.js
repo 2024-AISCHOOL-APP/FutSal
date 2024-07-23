@@ -5,6 +5,7 @@ const cors = require('cors');
 const path = require('path');
 const session = require('express-session')
 const fileStore = require('session-file-store')(session);
+const boardRoutes = require('./routes/board');
 
 // 6-1. 리액트 프로젝트 경로 설정
 app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')));
@@ -34,6 +35,8 @@ app.use('/', indexRouter);
 // 4-3. User페이지 경로 설정
 const userRouter = require('./routes/user')
 app.use('/user', userRouter)
+
+app.use('/board', boardRoutes);
 
 // 3-2. 포트 설정
 app.set('port', process.env.PORT || 8000);
