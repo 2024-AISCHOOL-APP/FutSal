@@ -26,12 +26,17 @@ const Header = () => {
           Board
         </Link>
       </Button>
-      <Button variant="secondary">
+      <Button variant="dark">
         <Link
           to="/createteam"
           style={{ color: "white", textDecoration: "none" }}
         >
           팀생성
+        </Link>
+      </Button>
+      <Button variant="dark">
+        <Link to="/team" style={{ color: "white", textDecoration: "none" }}>
+          확인용
         </Link>
       </Button>
     </div>

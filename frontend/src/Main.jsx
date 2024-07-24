@@ -46,6 +46,9 @@ const Main = () => {
   const [teamRecord, setTeamRecord] = useState(null);
   const [teamArea, setTeamArea] = useState(null);
   const [teamManager, setTeamManager] = useState(null);
+  const [teamImg1, setTeamImg1] = useState(null);
+  const [teamImg2, setTeamImg2] = useState(null);
+  const [teamText, setTeamText] = useState(null);
   // MatchInfo
   const [matchId, setMatchId] = useState(null);
   const [matchDate, setMatchDate] = useState(null);
@@ -53,6 +56,7 @@ const Main = () => {
   // JoinInfo
   const [joinId, setJoinId] = useState(null);
   const [joinDate, setJoinDate] = useState(null);
+  const [joinWaiting, setJoinWaiting] = useState(null);
   // CommentInfo
   const [commentId, setCommentId] = useState(null);
   const [commentContent, setCommentContent] = useState(null);
@@ -111,6 +115,8 @@ const Main = () => {
     >
       <TeamInfo.Provider
         value={{
+          teamId,
+          setTeamId,
           teamName,
           setTeamName,
           teamIcon,
@@ -123,6 +129,12 @@ const Main = () => {
           setTeamArea,
           teamManager,
           setTeamManager,
+          teamImg1,
+          setTeamImg1,
+          teamImg2,
+          setTeamImg2,
+          teamText,
+          setTeamText,
         }}
       >
         <MatchInfo.Provider
@@ -141,6 +153,8 @@ const Main = () => {
               setJoinId,
               joinDate,
               setJoinDate,
+              joinWaiting,
+              setJoinWaiting,
             }}
           >
             <CommentInfo.Provider
@@ -183,7 +197,7 @@ const Main = () => {
                   <Route path="/update" element={<Update />}></Route>
                   <Route path="/createteam" element={<CreateTeam />}></Route>
                   <Route path="/board" element={<Board />}></Route>
-                  <Route path="/posts/:id" element={<BoardDetail />} /> 
+                  <Route path="/posts/:id" element={<BoardDetail />} />
                   <Route path="/write" element={<Write />}></Route>
                   <Route path="/team" element={<Team />}></Route>
                 </Routes>

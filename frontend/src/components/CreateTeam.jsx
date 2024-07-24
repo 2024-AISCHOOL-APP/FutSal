@@ -26,6 +26,7 @@ const CreateTeam = () => {
             "x-session-id": sessionStorage.getItem("sessionId"),
           },
         });
+        console.log(userId);
         setUserId(response.data.userId);
         sessionStorage.setItem("userId", response.data.userId); // 세션에 userId 저장
       } catch (error) {

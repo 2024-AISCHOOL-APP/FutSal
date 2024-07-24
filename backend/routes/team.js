@@ -22,4 +22,75 @@ router.post("/handleCreateTeam", (req, res) => {
   });
 });
 
+router.get("/teamInfo", (req, res) => {
+  try {
+    const sql = `
+    SELECT * FROM teamInfo WHERE team_id = ?
+    `;
+    conn.query(sql, [1], (err, results) => {
+      if (err) {
+        console.error("Database error:", err); // 데이터베이스 오류 로깅
+        return res
+          .status(500)
+          .json({ success: false, message: "Database error occurred" });
+      }
+      if (results.length === 0) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Team not found" });
+      }
+      res.json({ success: true, data: results[0] });
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "An error occurred" });
+  }
+});
+
+router.post("/teamJoin", async (req, res) => {
+  const { teamId, userId } = req.body;
+
+  if (!teamId || !userId) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Team ID and User ID are required" });
+  }
+  try {
+    // 중복 확인 쿼리
+    const checkSql = "SELECT * FROM joinInfo WHERE team_id = ? AND user_id = ?";
+    conn.query(checkSql, [teamId, userId], (checkErr, checkResults) => {
+      if (checkErr) {
+        console.error("중복 확인 실패:", checkErr);
+        return res.status(500).json({
+          success: false,
+          message: "데이터베이스 오류가 발생했습니다.",
+        });
+      }
+
+      if (checkResults.length > 0) {
+        // 이미 가입 신청된 경우
+        return res
+          .status(400)
+          .json({ success: false, message: "이미 가입 신청 하셨습니다." });
+      }
+
+      // 중복이 아닌 경우, 가입 신청 처리
+      const sql =
+        "INSERT INTO joinInfo (team_id, user_id, join_date) VALUES (?, ?, NOW())";
+      conn.query(sql, [teamId, userId], (err, results) => {
+        if (err) {
+          console.error("팀 가입 실패:", err);
+          return res;
+        }
+        return res
+          .status(200)
+          .json({ success: true, message: "팀에 성공적으로 가입되었습니다." });
+      });
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "서버 내부 오류가 발생했습니다." });
+  }
+});
+
 module.exports = router;
