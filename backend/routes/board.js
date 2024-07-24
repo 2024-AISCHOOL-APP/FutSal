@@ -63,30 +63,26 @@ router.get('/getPosts', (req, res) => {
     }
 });
 
-router.post('/deletePosts', (req, res) => {
-    const { postIds } = req.body;
-
-    if (!postIds || postIds.length === 0) {
-        return res.status(400).json({ success: false, message: 'No posts selected for deletion' });
-    }
-
+router.get('/posts/:board_id', (req, res) =>{
+    const { board_id } = req.params;
     try {
-        const sql = `
-            DELETE FROM boardInfo 
-            WHERE board_id IN (?)
-        `;
-
-        conn.query(sql, [postIds], (err, results) => {
+        const sql = 'SELECT * FROM boardInfo WHERE board_id = ?';
+        conn.query(sql, [board_id], (err, results) => {
             if (err) {
                 console.error('SQL Error:', err);
                 return res.status(500).json({ success: false, message: 'Database error occurred' });
             }
-            res.json({ success: true });
+            if (results.length === 0) {
+                return res.status(404).json({ success: false, message: 'Post not found' });
+            }
+            res.json({ success: true, post: results[0] });
         });
-    } catch (err) {
+    } catch(err) {
         console.error(err);
         res.status(500).json({ success: false, message: 'An error occurred' });
     }
 });
+
+
 
 module.exports = router;

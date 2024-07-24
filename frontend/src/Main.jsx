@@ -14,7 +14,10 @@ import SignUp from "./components/SignUp";
 import Board from "./components/Board";
 import Write from "./components/Write";
 import CreateTeam from "./components/CreateTeam";
+import Update from "./components/Update";
+import Team from "./components/Team";
 import "./App.css";
+import BoardDetail from "./components/BoardDetail";
 
 const Main = () => {
   // UserInfo
@@ -55,6 +58,7 @@ const Main = () => {
   const [commentContent, setCommentContent] = useState(null);
   const [commentDate, setCommentDate] = useState(null);
   const [commentLike, setCommentLike] = useState(null);
+  const [comentLikeCount, setComentLikeCount] = useState(null);
   // BoardInfo
   const [boardId, setBoardId] = useState(null);
   const [boardType, setBoardType] = useState(null);
@@ -62,6 +66,7 @@ const Main = () => {
   const [boardContent, setBoardContent] = useState(null);
   const [boardDate, setBoardDate] = useState(null);
   const [boardLike, setBoardLike] = useState(null);
+  const [boardLikeCount, setBoardLikeCount] = useState(null);
 
   return (
     <UserInfo.Provider
@@ -148,6 +153,8 @@ const Main = () => {
                 setCommentDate,
                 commentLike,
                 setCommentLike,
+                comentLikeCount,
+                setComentLikeCount,
               }}
             >
               <BoardInfo.Provider
@@ -164,6 +171,8 @@ const Main = () => {
                   setBoardDate,
                   boardLike,
                   setBoardLike,
+                  boardLikeCount,
+                  setBoardLikeCount,
                 }}
               >
                 <Header />
@@ -173,6 +182,10 @@ const Main = () => {
                   <Route path="/signup" element={<SignUp />}></Route>
                   <Route path="/update" element={<Update />}></Route>
                   <Route path="/createteam" element={<CreateTeam />}></Route>
+                  <Route path="/board" element={<Board />}></Route>
+                  <Route path="/posts/:id" element={<BoardDetail />} /> 
+                  <Route path="/write" element={<Write />}></Route>
+                  <Route path="/team" element={<Team />}></Route>
                 </Routes>
               </BoardInfo.Provider>
             </CommentInfo.Provider>

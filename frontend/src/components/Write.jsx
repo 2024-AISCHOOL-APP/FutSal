@@ -21,14 +21,14 @@ const Write = () => {
         e.preventDefault();
         try {
             const response = await axios.post('/board/handleWrite', {
-                userId, 
-                boardType, 
+                userId,
+                boardType,
                 boardTitle,
                 boardContent,
                 boardDate,
                 boardLike
             });
-            console.log("response : ",response);
+            console.log("response : ", response);
             if (response.data.success) {
                 nav('/board');
             } else {
@@ -44,29 +44,30 @@ const Write = () => {
             <Form onSubmit={sendData}>
                 <Form.Group className="mb-3">
                     <Form.Label>게시글 타입</Form.Label>
-                    <Form.Control 
-                        as="select" 
-                        value={boardType} 
+                    <Form.Control
+                        as="select"
+                        value={boardType}
                         onChange={e => setBoardType(Number(e.target.value))}
                     >
                         <option value={1}>공지게시판</option>
                         <option value={2}>일반게시판</option>
+                        <option value={3}>용병게시판</option>
                     </Form.Control>
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>제목</Form.Label>
-                    <Form.Control 
-                        type="text"  
+                    <Form.Control
+                        type="text"
                         value={boardTitle}
-                        onChange={e => setBoardTitle(e.target.value)} 
+                        onChange={e => setBoardTitle(e.target.value)}
                     />
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>내용</Form.Label>
-                    <Form.Control 
+                    <Form.Control
                         as="textarea"
                         value={boardContent}
-                        onChange={e => setBoardContent(e.target.value)} 
+                        onChange={e => setBoardContent(e.target.value)}
                     />
                 </Form.Group>
                 <Button variant="info" type="submit">작성완료</Button>

@@ -18,33 +18,33 @@ app.use(cors());
 
 // 세션 설정을 직접 핸들링
 app.use((req, res, next) => {
-  const sessionId = req.headers["x-session-id"];
-  if (sessionId && sessionStore[sessionId]) {
-    req.session = sessionStore[sessionId];
-  } else {
-    req.session = {};
-  }
-  next();
+    const sessionId = req.headers["x-session-id"];
+    if (sessionId && sessionStore[sessionId]) {
+        req.session = sessionStore[sessionId];
+    } else {
+        req.session = {};
+    }
+    next();
 });
 
 app.post("/api/login", (req, res) => {
-  const { userId } = req.body;
-  if (userId) {
-    const sessionId = new Date().getTime().toString(); // 간단한 세션 ID 생성
-    sessionStore[sessionId] = { user: { user_id: userId } };
-    res.json({ sessionId });
-  } else {
-    res.status(400).json({ error: "Invalid userId" });
-  }
+    const { userId } = req.body;
+    if (userId) {
+        const sessionId = new Date().getTime().toString(); // 간단한 세션 ID 생성
+        sessionStore[sessionId] = { user: { user_id: userId } };
+        res.json({ sessionId });
+    } else {
+        res.status(400).json({ error: "Invalid userId" });
+    }
 });
 
 app.get("/api/get-session", (req, res) => {
-  const sessionId = req.headers["x-session-id"];
-  if (sessionId && sessionStore[sessionId]) {
-    res.json({ userId: sessionStore[sessionId].user.user_id });
-  } else {
-    res.status(401).json({ error: "Not authenticated" });
-  }
+    const sessionId = req.headers["x-session-id"];
+    if (sessionId && sessionStore[sessionId]) {
+        res.json({ userId: sessionStore[sessionId].user.user_id });
+    } else {
+        res.status(401).json({ error: "Not authenticated" });
+    }
 });
 
 // 4-3. 경로 설정
@@ -57,5 +57,5 @@ app.use("/team", teamRouter);
 // 3-2. 포트 설정
 app.set("port", process.env.PORT || 8000);
 app.listen(app.get("port"), () => {
-  console.log(`Server is running on ${app.get("port")}`);
+    console.log(`Server is running on ${app.get("port")}`);
 });
