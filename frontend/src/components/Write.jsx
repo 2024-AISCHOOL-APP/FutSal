@@ -1,32 +1,50 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import axios from '../axios';
 import { Link, useNavigate } from 'react-router-dom';
-import { UserInfo } from '../UserInfo';
 import { BoardInfo } from '../BoardInfo';
 
 const Write = () => {
-    const { userId } = useContext(UserInfo);
     const { boardType, setBoardType, boardTitle, setBoardTitle, boardContent, setBoardContent, boardDate, setBoardDate, boardLike, setBoardLike } = useContext(BoardInfo);
+    const [userId, setUserId] = useState(null); // userId 상태 추가
+    const [sessionId, setSessionId] = useState(null); // sessionId 상태 추가
     const nav = useNavigate();
 
     useEffect(() => {
-        setBoardType(1); // 기본값 설정: '공지게시판'
-        setBoardDate(new Date().toISOString().slice(0, 10));
-        setBoardLike(0); // 기본값 설정: 0
-    }, [setBoardType, setBoardDate, setBoardLike]);
+        // userId와 sessionId를 세션 스토리지에서 가져오기
+        const storedUserId = sessionStorage.getItem('userId');
+        const storedSessionId = sessionStorage.getItem('sessionId');
+
+        if (storedUserId && storedSessionId) {
+            setUserId(storedUserId);
+            setSessionId(storedSessionId);
+        } else {
+            // 사용자 ID가 없거나 세션이 만료된 경우 처리
+            console.error('사용자 ID 또는 세션 ID를 세션 스토리지에서 가져올 수 없습니다.');
+            nav('/signin'); // 로그인 페이지로 리디렉션
+        }
+
+        // 초기값 설정
+        if (boardType === undefined) setBoardType(1); // 기본값 : '공지게시판'
+        if (boardDate === undefined) setBoardDate(new Date().toISOString().slice(0, 10));
+        if (boardLike === undefined) setBoardLike(0); // 기본값 : 0
+    }, [setBoardType, setBoardDate, setBoardLike, boardType, boardDate, boardLike, nav]);
 
     const sendData = async (e) => {
         e.preventDefault();
         try {
+            if (!userId) {
+                console.error('사용자 ID가 설정되지 않았습니다.');
+                return;
+            }
             const response = await axios.post('/board/handleWrite', {
                 userId,
                 boardType,
                 boardTitle,
                 boardContent,
                 boardDate,
-                boardLike
+                boardLike: boardLike || 0  // boardLike를 추가
             });
             console.log("response : ", response);
             if (response.data.success) {
@@ -46,9 +64,10 @@ const Write = () => {
                     <Form.Label>게시글 타입</Form.Label>
                     <Form.Control
                         as="select"
-                        value={boardType}
+                        value={boardType || ''} 
                         onChange={e => setBoardType(Number(e.target.value))}
                     >
+                        <option value="">선택하세요</option>
                         <option value={1}>공지게시판</option>
                         <option value={2}>일반게시판</option>
                         <option value={3}>용병게시판</option>
@@ -58,7 +77,7 @@ const Write = () => {
                     <Form.Label>제목</Form.Label>
                     <Form.Control
                         type="text"
-                        value={boardTitle}
+                        value={boardTitle || ''} 
                         onChange={e => setBoardTitle(e.target.value)}
                     />
                 </Form.Group>
@@ -66,7 +85,7 @@ const Write = () => {
                     <Form.Label>내용</Form.Label>
                     <Form.Control
                         as="textarea"
-                        value={boardContent}
+                        value={boardContent || ''} 
                         onChange={e => setBoardContent(e.target.value)}
                     />
                 </Form.Group>
