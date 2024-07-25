@@ -18,7 +18,8 @@ import Update from "./components/Update";
 import Team from "./components/Team";
 import "./App.css";
 import BoardDetail from "./components/BoardDetail";
-
+import TeamApply from "./components/TeamApply";
+import SelfStats from "./components/SelfStats";
 const Main = () => {
   // UserInfo
   const [userId, setUserId] = useState(null);
@@ -200,6 +201,8 @@ const Main = () => {
                   <Route path="/posts/:id" element={<BoardDetail />} />
                   <Route path="/write" element={<Write />}></Route>
                   <Route path="/team" element={<Team />}></Route>
+                  <Route path="/teamapply" element={<TeamApply />}></Route>
+                  <Route path="/selfstats" element={<SelfStats />}></Route>
                 </Routes>
               </BoardInfo.Provider>
             </CommentInfo.Provider>

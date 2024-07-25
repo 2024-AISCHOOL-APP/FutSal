@@ -2,6 +2,8 @@ import React, { useContext, useState, useEffect } from "react";
 import { TeamInfo } from "../TeamInfo";
 import axios from "../axios";
 import { UserInfo } from "../UserInfo";
+import ModalComponent from "./TeamApplyModal";
+import TeamApply from "./TeamApply";
 
 const Team = () => {
   const {
@@ -26,6 +28,7 @@ const Team = () => {
   } = useContext(TeamInfo, UserInfo);
 
   const [userId, setUserId] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const fetchSessionData = async () => {
@@ -119,6 +122,9 @@ const Team = () => {
     }
   };
 
+  const handleShowModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
+
   return (
     <div>
       <div>
@@ -128,13 +134,17 @@ const Team = () => {
         <div>팀 ID: {teamId}</div>
         <div>팀 지역: {teamArea}</div>
         <div>팀 기록: {teamRecord}</div>
+        <button onClick={handleShowModal}>가입 대기 </button>
         <button onClick={teamJoin}>가입 신청</button>
       </div>
 
       <div>
         <h2>팀 점수</h2>
         <div>{teamScore}</div>
-        <div>요기는 차트 구현</div>
+        <div>
+          요기는 차트 구현-팀 가입은 스탯 안적어도 가입되게 하고 스탯창 적용은
+          마이페이지에서 셋팅해야 적용되게 적용
+        </div>
       </div>
 
       <div>
@@ -143,6 +153,9 @@ const Team = () => {
         <div>이미지 2: {teamImg2}</div>
         <div>팀 설명: {teamText}</div>
       </div>
+      <ModalComponent show={showModal} handleClose={handleCloseModal}>
+        <TeamApply />
+      </ModalComponent>
     </div>
   );
 };

@@ -104,11 +104,74 @@ router.post("/handleSignUp", async (req, res) => {
       message: "Error occurred during sign-up process",
     });
   }
+});
+router.post("/SelfStats", (req, res) => {
+  console.log(req.body);
+  const {
+    userId,
+    userPosition,
+    userShooting,
+    userPassing,
+    userDribbling,
+    userSpeed,
+    userDefending,
+    userGoalkeeping,
+  } = req.body;
 
-  router.post("/handleUpdate", (req, res) => {
-    console.log(req.body);
-    const {
+  const sql = `
+      UPDATE userInfo 
+      SET user_position=?, user_shooting=?, user_passing=?, user_dribbling=?,
+      user_speed=?, user_defending=?, user_goalkeeping=?
+      WHERE user_id=?
+  `;
+
+  conn.query(
+    sql,
+    [
+      userPosition,
+      userShooting,
+      userPassing,
+      userDribbling,
+      userSpeed,
+      userDefending,
+      userGoalkeeping,
       userId,
+    ],
+    (err) => {
+      if (err) {
+        console.error("SQL Error:", err);
+        return res
+          .status(500)
+          .json({ success: false, message: "Database error occurred" });
+      }
+      res.json({ success: true });
+    }
+  );
+});
+
+router.post("/handleUpdate", (req, res) => {
+  console.log(req.body);
+  const {
+    userId,
+    userPw,
+    userNickname,
+    userImg,
+    userAge,
+    userHeight,
+    userWeight,
+    userArea,
+    userEmail,
+  } = req.body;
+
+  const sql = `
+      UPDATE userInfo 
+      SET user_pw=?, user_nickname=?, user_img=?, user_age=?, user_height=?, user_weight=?, user_area=?, user_email=?
+      WHERE user_id=?
+    `;
+
+  conn.query(
+    sql,
+    [
       userPw,
       userNickname,
       userImg,
@@ -117,38 +180,18 @@ router.post("/handleSignUp", async (req, res) => {
       userWeight,
       userArea,
       userEmail,
-    } = req.body;
-
-    const sql = `
-      UPDATE userInfo 
-      SET user_pw=?, user_nickname=?, user_img=?, user_age=?, user_height=?, user_weight=?, user_area=?, user_email=?
-      WHERE user_id=?
-    `;
-
-    conn.query(
-      sql,
-      [
-        userPw,
-        userNickname,
-        userImg,
-        userAge,
-        userHeight,
-        userWeight,
-        userArea,
-        userEmail,
-        userId,
-      ],
-      (err, results) => {
-        if (err) {
-          console.error("SQL Error:", err);
-          return res
-            .status(500)
-            .json({ success: false, message: "Database error occurred" });
-        }
-        res.json({ success: true });
+      userId,
+    ],
+    (err, results) => {
+      if (err) {
+        console.error("SQL Error:", err);
+        return res
+          .status(500)
+          .json({ success: false, message: "Database error occurred" });
       }
-    );
-  });
+      res.json({ success: true });
+    }
+  );
 });
 
 module.exports = router;

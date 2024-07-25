@@ -92,5 +92,60 @@ router.post("/teamJoin", async (req, res) => {
       .json({ success: false, message: "서버 내부 오류가 발생했습니다." });
   }
 });
+router.get("/getApplys", (req, res) => {
+  try {
+    const sql =
+      "SELECT * FROM joinInfo WHERE team_id = ? AND join_waiting = 'N'";
+    const team_id = 1;
 
+    conn.query(sql, [team_id], (err, results) => {
+      if (err) {
+        return res
+          .status(500)
+          .json({ success: false, message: "Database error occurred" });
+      }
+      res.json({ success: true, posts: results });
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "An error occurred" });
+  }
+});
+
+router.post("/applyAccept", (req, res) => {
+  const { user_id } = req.body;
+  const team_id = 1;
+  const updateSql = `UPDATE userInfo SET team_id = ? WHERE user_id = ?`;
+  conn.query(updateSql, [team_id, user_id], (err, results) => {
+    if (err) {
+      console.error("Database error:", err);
+      return res
+        .status(500)
+        .json({ success: false, message: "Database error occurred" });
+    }
+    const deleteSql = `DELETE FROM joinInfo WHERE team_id = ? AND user_id = ?`;
+    conn.query(deleteSql, [team_id, user_id], (err, deleteResults) => {
+      if (err) {
+        console.error("Database error during delete:", err);
+        return res.status(500).json({
+          success: false,
+          message: "Database error occurred during delete",
+        });
+      }
+      res.json({ success: true });
+    });
+  });
+});
+router.post("/applyRefuse", (req, res) => {
+  const { user_id } = req.body;
+  const team_id = 1;
+  const sql = `DELETE FROM joinInfo WHERE team_id = ? AND user_id = ?`;
+  conn.query(sql, [team_id, user_id], (err, results) => {
+    if (err) {
+      return res
+        .status(500)
+        .json({ success: false, message: "Database error occurred" });
+    }
+    res.json({ success: true });
+  });
+});
 module.exports = router;
