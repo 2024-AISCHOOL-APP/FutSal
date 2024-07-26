@@ -39,6 +39,11 @@ const Header = () => {
           확인용
         </Link>
       </Button>
+      <Button variant="dark">
+        <Link to="/teamlist" style={{ color: "white", textDecoration: "none" }}>
+          팀 목록
+        </Link>
+      </Button>
     </div>
   );
 };

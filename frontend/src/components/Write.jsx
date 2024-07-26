@@ -48,6 +48,12 @@ const Write = () => {
             });
             console.log("response : ", response);
             if (response.data.success) {
+                // 게시물 작성 후 상태를 초기화
+                setBoardType(1);
+                setBoardTitle('');
+                setBoardContent('');
+                setBoardDate(new Date().toISOString().slice(0, 10));
+                setBoardLike(0);
                 nav('/board');
             } else {
                 nav('/write');
@@ -69,7 +75,7 @@ const Write = () => {
                     >
                         <option value="">선택하세요</option>
                         <option value={1}>공지게시판</option>
-                        <option value={2}>일반게시판</option>
+                        <option value={2}>자유게시판</option>
                         <option value={3}>용병게시판</option>
                     </Form.Control>
                 </Form.Group>

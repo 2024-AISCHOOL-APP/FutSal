@@ -148,4 +148,41 @@ router.post("/applyRefuse", (req, res) => {
     res.json({ success: true });
   });
 });
+
+
+// 팀 목록 가져오기
+router.get("/teamlist", (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const offset = (page - 1) * limit;
+
+  const sql = `
+    SELECT team_id AS id, team_name AS name, team_icon AS icon, team_area AS area, team_score AS score, team_img1 AS image_url, team_text AS description
+    FROM teamInfo
+    LIMIT ? OFFSET ?
+  `;
+  const countSql = `
+    SELECT COUNT(*) AS total
+    FROM teamInfo
+  `;
+
+  conn.query(countSql, (countErr, countResults) => {
+    if (countErr) {
+      console.error("Database error:", countErr);
+      return res.status(500).json({ success: false, message: "Database error occurred" });
+    }
+
+    const totalTeams = countResults[0].total;
+    const totalPages = Math.ceil(totalTeams / limit);
+
+    conn.query(sql, [limit, offset], (err, results) => {
+      if (err) {
+        console.error("Database error:", err);
+        return res.status(500).json({ success: false, message: "Database error occurred" });
+      }
+      res.json({ success: true, teams: results, totalPages: totalPages });
+    });
+  });
+});
+
 module.exports = router;

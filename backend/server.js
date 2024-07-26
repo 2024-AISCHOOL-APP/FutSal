@@ -8,7 +8,7 @@ const indexRouter = require("./routes");
 const userRouter = require("./routes/user");
 const boardRoutes = require("./routes/board");
 const teamRouter = require("./routes/team");
-
+const commentRouter = require("./routes/comment")
 // 6-1. 리액트 프로젝트 경로 설정
 app.use(express.static(path.join(__dirname, "..", "frontend", "build")));
 app.use(express.json());
@@ -53,6 +53,7 @@ app.use("/", indexRouter);
 app.use("/user", userRouter);
 app.use("/board", boardRoutes);
 app.use("/team", teamRouter);
+app.use('/api', commentRouter); 
 
 // 3-2. 포트 설정
 app.set("port", process.env.PORT || 8000);

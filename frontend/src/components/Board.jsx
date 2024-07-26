@@ -30,6 +30,10 @@ const Board = () => {
     const [error, setError] = useState(null);
     const [userId, setUserId] = useState(''); // 초기값 빈 문자열로 설정
     const [sessionId, setSessionId] = useState(null);
+    const [searchQuery, setSearchQuery] = useState(''); // 검색어 상태
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const itemsPerPage = 10;
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -47,9 +51,20 @@ const Board = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await axios.get('/board/getPosts');
+                const response = await axios.get('/board/getPosts', {
+                    params: {
+                        page: currentPage,
+                        limit: itemsPerPage,
+                        type: selectedType
+                    },
+                    headers: {
+                        "x-session-id": sessionId,
+                        "user-id": userId
+                    }
+                });
                 setBoardsId(response.data.posts);
                 setFilteredPosts(response.data.posts);
+                setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage)); // 페이지 수 재계산
             } catch (error) {
                 setError('게시글을 가져오는 데 오류가 발생했습니다.');
             } finally {
@@ -57,24 +72,38 @@ const Board = () => {
             }
         };
         fetchPosts();
-    }, []);
+    }, [selectedType, currentPage, userId, sessionId]);
 
     // 게시글 타입 필터링 
     const filterByType = (type) => {
         setSelectedType(type);
+        setCurrentPage(1); // 타입 필터링 변경 시 페이지를 첫 페이지로 리셋
     };
 
+    // 게시글 검색
     useEffect(() => {
-        if (selectedType === 0) {
-            setFilteredPosts(boardsId);
-        } else {
-            setFilteredPosts(boardsId.filter(post => post.board_type === selectedType));
-        }
-    }, [selectedType, boardsId]);
+        const filtered = boardsId.filter(post =>
+            post.board_title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            post.user_id.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setFilteredPosts(filtered);
+    }, [searchQuery, boardsId]);
 
     // 게시글 클릭 핸들러
     const handleRowClick = (postId) => {
         navigate(`/posts/${postId}`);
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        }
     };
 
     return (
@@ -91,6 +120,17 @@ const Board = () => {
                     <option value={2}>자유게시판</option>
                     <option value={3}>용병게시판</option>
                 </Form.Control>
+            </Form.Group>
+
+            {/* 검색 입력 필드 추가 */}
+            <Form.Group>
+                <Form.Label>검색</Form.Label>
+                <Form.Control
+                    type="text"
+                    placeholder="제목 또는 작성자로 검색"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
             </Form.Group>
 
             {/* 로딩 및 오류 처리 */}
@@ -127,6 +167,16 @@ const Board = () => {
                     )}
                 </tbody>
             </Table>
+
+            <div className="pagination">
+                <Button variant="primary" onClick={handlePreviousPage} disabled={currentPage === 1}>
+                    이전
+                </Button>
+                <span className="pagination-info">페이지 {currentPage} / {totalPages}</span>
+                <Button variant="primary" onClick={handleNextPage} disabled={currentPage === totalPages}>
+                    다음
+                </Button>
+            </div>
 
             <Button variant="info">
                 <Link to='/write' style={{ color: 'white', textDecoration: 'none' }}>글쓰기</Link>

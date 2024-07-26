@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import Header from "./components/Header";
 import { Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -16,10 +16,11 @@ import Write from "./components/Write";
 import CreateTeam from "./components/CreateTeam";
 import Update from "./components/Update";
 import Team from "./components/Team";
-import "./App.css";
-import BoardDetail from "./components/BoardDetail";
 import TeamApply from "./components/TeamApply";
 import SelfStats from "./components/SelfStats";
+import BoardDetail from "./components/BoardDetail";
+import Comment from "./components/Comment";
+import TeamList from './components/TeamList';
 const Main = () => {
   // UserInfo
   const [userId, setUserId] = useState(null);
@@ -192,17 +193,19 @@ const Main = () => {
               >
                 <Header />
                 <Routes>
-                  <Route path="/" element={<Home />}></Route>
-                  <Route path="/signin" element={<SignIn />}></Route>
-                  <Route path="/signup" element={<SignUp />}></Route>
-                  <Route path="/update" element={<Update />}></Route>
-                  <Route path="/createteam" element={<CreateTeam />}></Route>
-                  <Route path="/board" element={<Board />}></Route>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/signin" element={<SignIn />} />
+                  <Route path="/signup" element={<SignUp />} />
+                  <Route path="/update" element={<Update />} />
+                  <Route path="/createteam" element={<CreateTeam />} />
+                  <Route path="/board" element={<Board />} />
                   <Route path="/posts/:id" element={<BoardDetail />} />
-                  <Route path="/write" element={<Write />}></Route>
-                  <Route path="/team" element={<Team />}></Route>
-                  <Route path="/teamapply" element={<TeamApply />}></Route>
-                  <Route path="/selfstats" element={<SelfStats />}></Route>
+                  <Route path="/write" element={<Write />} />
+                  <Route path="/team" element={<Team />} />
+                  <Route path="/teamlist" element={<TeamList />} />
+                  <Route path="/teamapply" element={<TeamApply />} />
+                  <Route path="/selfstats" element={<SelfStats />} />
+                  <Route path="/comment/:boardId" element={<Comment />} />
                 </Routes>
               </BoardInfo.Provider>
             </CommentInfo.Provider>
