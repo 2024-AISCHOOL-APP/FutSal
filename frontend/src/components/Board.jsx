@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
-import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import axios from '../axios';
 import { Link, useNavigate } from 'react-router-dom';
+import '../css/board.css'
 
 // 게시글 타입 숫자를 문자열로 변환하는 함수
 const getBoardTypeName = (type) => {
@@ -107,9 +107,9 @@ const Board = () => {
     };
 
     return (
-        <div>
-            <Form.Group>
-                <Form.Label>게시글 타입</Form.Label>
+        <div className="container">
+            <Form.Group className="form-group">
+                <Form.Label className="form-label">게시글 타입</Form.Label>
                 <Form.Control
                     as="select"
                     value={selectedType}
@@ -122,22 +122,11 @@ const Board = () => {
                 </Form.Control>
             </Form.Group>
 
-            {/* 검색 입력 필드 추가 */}
-            <Form.Group>
-                <Form.Label>검색</Form.Label>
-                <Form.Control
-                    type="text"
-                    placeholder="제목 또는 작성자로 검색"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                />
-            </Form.Group>
-
             {/* 로딩 및 오류 처리 */}
             {loading && <p>로딩 중...</p>}
             {error && <p style={{ color: 'red' }}>{error}</p>}
 
-            <Table striped bordered hover>
+            <Table className='table' striped bordered hover>
                 <thead>
                     <tr>
                         <th>게시글 타입</th>
@@ -168,19 +157,9 @@ const Board = () => {
                 </tbody>
             </Table>
 
-            <div className="pagination">
-                <Button variant="primary" onClick={handlePreviousPage} disabled={currentPage === 1}>
-                    이전
-                </Button>
-                <span className="pagination-info">페이지 {currentPage} / {totalPages}</span>
-                <Button variant="primary" onClick={handleNextPage} disabled={currentPage === totalPages}>
-                    다음
-                </Button>
+            <div className='button-write'>
+                <Link to='/write'>글쓰기</Link>
             </div>
-
-            <Button variant="info">
-                <Link to='/write' style={{ color: 'white', textDecoration: 'none' }}>글쓰기</Link>
-            </Button>
         </div>
     );
 };

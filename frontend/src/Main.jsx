@@ -21,6 +21,9 @@ import BoardDetail from "./components/BoardDetail";
 import MyPage from "./components/MyPage";
 import Comment from "./components/Comment";
 import TeamList from "./components/TeamList";
+import NavbarUnLog from "./components/NavbarUnLog";
+import NavbarLog from "./components/NavbarLog";
+
 const Main = () => {
   // UserInfo
   const [userId, setUserId] = useState(null);
@@ -41,6 +44,8 @@ const Main = () => {
   const [userDefending, setUserDefending] = useState(null);
   const [userGoalkeeping, setUserGoalkeeping] = useState(null);
   const [userEmail, setUserEmail] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   // TeamInfo
   const [teamName, setTeamName] = useState(null);
   const [teamIcon, setTeamIcon] = useState(null);
@@ -113,6 +118,8 @@ const Main = () => {
         setUserGoalkeeping,
         userEmail,
         setUserEmail,
+        isLoggedIn,
+        setIsLoggedIn,
       }}
     >
       <TeamInfo.Provider
@@ -192,6 +199,7 @@ const Main = () => {
                 }}
               >
                 <Header />
+                {isLoggedIn ? <NavbarLog /> : <NavbarUnLog />}
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="/signin" element={<SignIn />} />
@@ -206,6 +214,7 @@ const Main = () => {
                   <Route path="/mypage" element={<MyPage />}></Route>
                   <Route path="/comment/:boardId" element={<Comment />} />
                 </Routes>
+                {/* <MainContent /> */}
               </BoardInfo.Provider>
             </CommentInfo.Provider>
           </JoinInfo.Provider>
