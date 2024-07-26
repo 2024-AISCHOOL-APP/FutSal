@@ -7,8 +7,6 @@ import { useNavigate } from "react-router-dom";
 
 const Update = () => {
   const {
-    userPw,
-    setUserPw,
     userNickname,
     setUserNickname,
     userImg,
@@ -24,6 +22,16 @@ const Update = () => {
     userEmail,
     setUserEmail,
   } = useContext(UserInfo);
+
+  // 로컬 상태 추가
+  const [localNickname, setLocalNickname] = useState(userNickname);
+  const [localImg, setLocalImg] = useState(userImg);
+  const [localAge, setLocalAge] = useState(userAge);
+  const [localHeight, setLocalHeight] = useState(userHeight);
+  const [localWeight, setLocalWeight] = useState(userWeight);
+  const [localArea, setLocalArea] = useState(userArea);
+  const [localEmail, setLocalEmail] = useState(userEmail);
+  const [userPw, setUserPw] = useState("");
   const [confirmPw, setConfirmPw] = useState("");
   const [pwError, setPwError] = useState(false); // 상태 추가: 비밀번호 불일치 에러 표시용
   const [userId, setUserId] = useState(null); // userId 상태 추가
@@ -69,13 +77,13 @@ const Update = () => {
         {
           userId,
           userPw,
-          userNickname,
-          userImg,
-          userAge,
-          userHeight,
-          userWeight,
-          userArea,
-          userEmail,
+          userNickname: localNickname,
+          userImg: localImg,
+          userAge: localAge,
+          userHeight: localHeight,
+          userWeight: localWeight,
+          userArea: localArea,
+          userEmail: localEmail,
         },
         {
           headers: {
@@ -84,7 +92,18 @@ const Update = () => {
         }
       );
       console.log(response);
-      response.data.success ? nav("/home") : nav("/update");
+      if (response.data.success) {
+        setUserNickname(localNickname); // 글로벌 상태 업데이트
+        setUserImg(localImg);
+        setUserAge(localAge);
+        setUserHeight(localHeight);
+        setUserWeight(localWeight);
+        setUserArea(localArea);
+        setUserEmail(localEmail);
+        alert("회원정보가 수정되었습니다.");
+      } else {
+        nav("/update");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -123,7 +142,8 @@ const Update = () => {
           <Form.Control
             type="text"
             placeholder="Nickname"
-            onChange={(e) => setUserNickname(e.target.value)}
+            value={localNickname}
+            onChange={(e) => setLocalNickname(e.target.value)}
           />
         </Form.Group>
 
@@ -132,7 +152,8 @@ const Update = () => {
           <Form.Control
             type="text"
             placeholder="Image URL"
-            onChange={(e) => setUserImg(e.target.value)}
+            value={localImg}
+            onChange={(e) => setLocalImg(e.target.value)}
           />
         </Form.Group>
 
@@ -141,7 +162,8 @@ const Update = () => {
           <Form.Control
             type="number"
             placeholder="Age"
-            onChange={(e) => setUserAge(e.target.value)}
+            value={localAge}
+            onChange={(e) => setLocalAge(e.target.value)}
           />
         </Form.Group>
 
@@ -150,7 +172,8 @@ const Update = () => {
           <Form.Control
             type="number"
             placeholder="Height"
-            onChange={(e) => setUserHeight(e.target.value)}
+            value={localHeight}
+            onChange={(e) => setLocalHeight(e.target.value)}
           />
         </Form.Group>
 
@@ -159,7 +182,8 @@ const Update = () => {
           <Form.Control
             type="number"
             placeholder="Weight"
-            onChange={(e) => setUserWeight(e.target.value)}
+            value={localWeight}
+            onChange={(e) => setLocalWeight(e.target.value)}
           />
         </Form.Group>
 
@@ -168,7 +192,8 @@ const Update = () => {
           <Form.Control
             type="text"
             placeholder="Area"
-            onChange={(e) => setUserArea(e.target.value)}
+            value={localArea}
+            onChange={(e) => setLocalArea(e.target.value)}
           />
         </Form.Group>
 
@@ -177,7 +202,8 @@ const Update = () => {
           <Form.Control
             type="email"
             placeholder="Email"
-            onChange={(e) => setUserEmail(e.target.value)}
+            value={localEmail}
+            onChange={(e) => setLocalEmail(e.target.value)}
           />
         </Form.Group>
 

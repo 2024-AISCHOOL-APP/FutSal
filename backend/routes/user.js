@@ -163,35 +163,102 @@ router.post("/handleUpdate", (req, res) => {
     userEmail,
   } = req.body;
 
-  const sql = `
+  const saltRounds = 10;
+
+  bcrypt.hash(userPw, saltRounds, (err, hashedPw) => {
+    if (err) {
+      console.error("Hashing error:", err);
+      return res
+        .status(500)
+        .json({ success: false, message: "Password hashing error occurred" });
+    }
+
+    const sql = `
       UPDATE userInfo 
       SET user_pw=?, user_nickname=?, user_img=?, user_age=?, user_height=?, user_weight=?, user_area=?, user_email=?
       WHERE user_id=?
     `;
 
-  conn.query(
-    sql,
-    [
-      userPw,
-      userNickname,
-      userImg,
-      userAge,
-      userHeight,
-      userWeight,
-      userArea,
-      userEmail,
-      userId,
-    ],
-    (err, results) => {
+    conn.query(
+      sql,
+      [
+        hashedPw, // 해싱된 비밀번호를 사용합니다
+        userNickname,
+        userImg,
+        userAge,
+        userHeight,
+        userWeight,
+        userArea,
+        userEmail,
+        userId,
+      ],
+      (err, results) => {
+        if (err) {
+          console.error("SQL Error:", err);
+          return res
+            .status(500)
+            .json({ success: false, message: "Database error occurred" });
+        }
+        res.json({ success: true });
+      }
+    );
+  });
+});
+
+router.post("/userInfo", (req, res) => {
+  const { userId } = req.body;
+
+  try {
+    const userSql = `
+      SELECT * FROM userInfo WHERE user_id = ?
+    `;
+    conn.query(userSql, [userId], (err, userResults) => {
       if (err) {
-        console.error("SQL Error:", err);
+        console.error("Database error:", err); // 데이터베이스 오류 로깅
         return res
           .status(500)
           .json({ success: false, message: "Database error occurred" });
       }
-      res.json({ success: true });
-    }
-  );
+
+      if (userResults.length === 0) {
+        return res
+          .status(404)
+          .json({ success: false, message: "User not found" });
+      }
+
+      const userInfo = userResults[0];
+      const teamId = userInfo.team_id;
+
+      if (!teamId) {
+        // 팀 ID가 없는 경우, 사용자 정보만 반환
+        return res.json({ success: true, data: userInfo });
+      }
+
+      const teamSql = `
+        SELECT team_name FROM teamInfo WHERE team_id = ?
+      `;
+      conn.query(teamSql, [teamId], (err, teamResults) => {
+        if (err) {
+          console.error("Database error:", err); // 데이터베이스 오류 로깅
+          return res
+            .status(500)
+            .json({ success: false, message: "Database error occurred" });
+        }
+
+        if (teamResults.length === 0) {
+          return res
+            .status(404)
+            .json({ success: false, message: "Team not found" });
+        }
+
+        userInfo.team_name = teamResults[0].team_name;
+
+        res.json({ success: true, data: userInfo });
+      });
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "An error occurred" });
+  }
 });
 
 module.exports = router;

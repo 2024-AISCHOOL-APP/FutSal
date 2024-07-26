@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import Header from "./components/Header";
-import { Route, Routes } from "react-router-dom";
+import { BrowserRouter as Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { UserInfo } from "./UserInfo";
 import { TeamInfo } from "./TeamInfo";
@@ -14,13 +14,13 @@ import SignUp from "./components/SignUp";
 import Board from "./components/Board";
 import Write from "./components/Write";
 import CreateTeam from "./components/CreateTeam";
-import Update from "./components/Update";
 import Team from "./components/Team";
+import "./App.css";
 import TeamApply from "./components/TeamApply";
-import SelfStats from "./components/SelfStats";
 import BoardDetail from "./components/BoardDetail";
+import MyPage from "./components/MyPage";
 import Comment from "./components/Comment";
-import TeamList from './components/TeamList';
+import TeamList from "./components/TeamList";
 const Main = () => {
   // UserInfo
   const [userId, setUserId] = useState(null);
@@ -196,7 +196,6 @@ const Main = () => {
                   <Route path="/" element={<Home />} />
                   <Route path="/signin" element={<SignIn />} />
                   <Route path="/signup" element={<SignUp />} />
-                  <Route path="/update" element={<Update />} />
                   <Route path="/createteam" element={<CreateTeam />} />
                   <Route path="/board" element={<Board />} />
                   <Route path="/posts/:id" element={<BoardDetail />} />
@@ -204,7 +203,7 @@ const Main = () => {
                   <Route path="/team" element={<Team />} />
                   <Route path="/teamlist" element={<TeamList />} />
                   <Route path="/teamapply" element={<TeamApply />} />
-                  <Route path="/selfstats" element={<SelfStats />} />
+                  <Route path="/mypage" element={<MyPage />}></Route>
                   <Route path="/comment/:boardId" element={<Comment />} />
                 </Routes>
               </BoardInfo.Provider>
