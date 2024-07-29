@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "../axios"; // axios 인스턴스 설정
 import { Form, Button, Card, Spinner, CardHeader } from "react-bootstrap";
+import '../css/comment.css';
 
 const Comment = ({ boardId }) => {
   const [comments, setComments] = useState([]);
@@ -69,7 +70,7 @@ const Comment = ({ boardId }) => {
       {/* 댓글 목록 */}
       <div className="comment-list">
         {comments.map((comment) => (
-          <Card key={comment.comment_id} className="mb-3 shadow-sm">
+          <Card key={comment.comment_id} className="mb-3 commentBox">
             <CardHeader>댓글</CardHeader>
             <Card.Body>
               <Card.Title className="mb-1"></Card.Title>

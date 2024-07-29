@@ -40,62 +40,64 @@ const SignUp = () => {
 
 
     return (
-        <div className="container">
-            <header>
-                <h1>회원가입</h1>
-            </header>
-            <main>
-                <Form onSubmit={sendData}>
-                    <div className="form-group">
-                        <Form.Label>아이디</Form.Label>
-                        <div className="input-group">
-                            <Form.Control type="text" className="loginInput" placeholder="ID" onChange={e => setUserId(e.target.value)} />
-                            <Button type="button" className="duplicateCheck">중복확인</Button>
+        <div className='container'>
+            <div className="signup-form-container">
+                <header>
+                    <h1>회원가입</h1>
+                </header>
+                <main>
+                    <Form onSubmit={sendData}>
+                        <div className="formGroup">
+                            <Form.Label>아이디</Form.Label>
+                            <div className="input-group">
+                                <Form.Control type="text" className="loginInput" placeholder="ID" onChange={e => setUserId(e.target.value)} />
+                                <Button type="button" className="duplicateCheck">중복확인</Button>
+                            </div>
                         </div>
-                    </div>
-                    <div className="form-group">
-                        <Form.Label>닉네임</Form.Label>
-                        <div className="input-group">
-                            <Form.Control type="text" className="loginInput" placeholder="Nickname" onChange={e => setUserNickname(e.target.value)} />
-                            <Button type="button" className="duplicateCheck">중복확인</Button>
+                        <div className="formGroup">
+                            <Form.Label>닉네임</Form.Label>
+                            <div className="input-group">
+                                <Form.Control type="text" className="loginInput" placeholder="Nickname" onChange={e => setUserNickname(e.target.value)} />
+                                <Button type="button" className="duplicateCheck">중복확인</Button>
+                            </div>
                         </div>
-                    </div>
-                    <div className="form-group">
-                        <Form.Label>비밀번호</Form.Label>
-                        <Form.Control type="password" className="loginInput" placeholder="Password" onChange={e => setUserPw(e.target.value)} />
-                    </div>
-                    <div className="form-group">
-                        <Form.Label>비밀번호 확인</Form.Label>
-                        <Form.Control type="password" className="loginInput" />
-                    </div>
-                    <div className="form-group">
-                        <Form.Label>성별</Form.Label>
-                        <div className="gender-group">
-                            <Form.Check inline type="radio" id="gender-male" label="Male" value="1" checked={userGender === '1'} onChange={e => setUserGender(e.target.value)} />
-                            <Form.Check inline type="radio" id="gender-female" label="Female" value="0" checked={userGender === '0'} onChange={e => setUserGender(e.target.value)} />
+                        <div className="formGroup">
+                            <Form.Label>비밀번호</Form.Label>
+                            <Form.Control type="password" className="loginInput" placeholder="Password" onChange={e => setUserPw(e.target.value)} />
                         </div>
-                    </div>
-                    <div className="form-group">
-                        <Form.Label>나이</Form.Label>
-                        <Form.Control type="number" className="loginInput" placeholder="Age" onChange={e => setUserAge(e.target.value)} />
-                    </div>
-                    <div className="form-group">
-                        <Form.Label>키</Form.Label>
-                        <Form.Control type="number" className="loginInput" placeholder="Height" onChange={e => setUserHeight(e.target.value)} />
-                    </div>
-                    <div className="form-group">
-                        <Form.Label>몸무게</Form.Label>
-                        <Form.Control type="number" className="loginInput" placeholder="Weight" onChange={e => setUserWeight(e.target.value)} />
-                    </div>
-                    <div className="form-group">
-                        <Form.Label>이메일</Form.Label>
-                        <Form.Control type="email" className="loginInput" placeholder="Email" onChange={e => setUserEmail(e.target.value)} />
-                    </div>
-                    <div className="centered-button">
-                        <Button variant="primary" type="submit">가입하기</Button>
-                    </div>
-                </Form>
-            </main>
+                        <div className="formGroup">
+                            <Form.Label style={{textAlign:'center', fontSize:'18px'}}>비밀번호 확인</Form.Label>
+                            <Form.Control type="password" className="loginInput" />
+                        </div>
+                        <div className="formGroup">
+                            <Form.Label>성별</Form.Label>
+                            <div className="gender-group">
+                                <Form.Check inline type="radio" id="gender-male" label="남" value="1" checked={userGender === '1'} onChange={e => setUserGender(e.target.value)} />
+                                <Form.Check inline type="radio" id="gender-female" label="여" value="0" checked={userGender === '0'} onChange={e => setUserGender(e.target.value)} />
+                            </div>
+                        </div>
+                        <div className="formGroup">
+                            <Form.Label>나이</Form.Label>
+                            <Form.Control type="number" className="loginInput" placeholder="Age" onChange={e => setUserAge(e.target.value)} />
+                        </div>
+                        <div className="formGroup">
+                            <Form.Label>키</Form.Label>
+                            <Form.Control type="number" className="loginInput" placeholder="Height" onChange={e => setUserHeight(e.target.value)} />
+                        </div>
+                        <div className="formGroup">
+                            <Form.Label>몸무게</Form.Label>
+                            <Form.Control type="number" className="loginInput" placeholder="Weight" onChange={e => setUserWeight(e.target.value)} />
+                        </div>
+                        <div className="formGroup">
+                            <Form.Label>이메일</Form.Label>
+                            <Form.Control type="email" className="loginInput" placeholder="Email" onChange={e => setUserEmail(e.target.value)} />
+                        </div>
+                        <div className="centered-button">
+                            <Button variant="primary" type="submit">가입하기</Button>
+                        </div>
+                    </Form>
+                </main>
+            </div>
         </div>
     );
 };

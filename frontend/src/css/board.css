@@ -6,24 +6,43 @@
     padding: 20px;
 }
 
-.form-group {
-    margin-bottom: 20px;
+.form-row {
+    display: flex;
+    justify-content: flex-end; /* 오른쪽 정렬 */
+    align-items: center;
+    gap: 20px; /* 그룹 간의 간격 */
+    margin-bottom: 20px; /* 하단 여백 */
+}
+
+
+.form-group, .search-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 0;
 }
 
 .form-label {
     font-size: 1.2em;
+    margin: 0;
     color: #333;
+    width: 50px;
 }
 
 .form-control {
     border-radius: 5px;
     border: 1px solid #ddd;
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    max-width: 100%; /* 폼 컨트롤의 최대 너비 100%로 설정 */
 }
 
 .form-control:focus {
     border-color: #80E5A8;
     box-shadow: 0 0 0 0.2rem rgba(128, 229, 168, 0.25);
+}
+
+.serach-group {
+    margin-top: 10px;
 }
 
 .table {
@@ -67,6 +86,14 @@
     /* 배경색 제거 */
 }
 
+.table tbody .truncate {
+    max-width: 400px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+/* 게시글 제목 길이 초과 시 ... 으로 표시 */
+
 .button-write {
     margin-top: 20px;
     display: flex;
@@ -88,4 +115,185 @@
 
 .button-write a:hover {
     background-color: #66d09d;
+}
+
+.pagination-info {
+    display: inline-block;
+    margin: 0 10px;
+    align-self: center;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+.pagination-info {
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.pagination-buttons {
+    padding: 10px 20px;
+    background-color: #80E5A8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.pagination-buttons:hover {
+    background-color: #66d09d;
+}
+
+.pagination-buttons:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.container thead {
+    --bs-table-bg: #EFFBEF;
+}
+
+tbody {
+    --bs-table-striped-color: inherit;
+    --bs-table-striped-bg: transparent;
+}
+/* 스트라이프 효과의 색상과 배경색을 투명으로 설정 */
+
+.table-bordered>:not(caption)>*>* {
+    border-width: 0;
+}
+/* 구분선 삭제 */
+
+
+
+
+/* BoardDetail 스타일 */
+.board-detail-card {
+    border-radius: 8px;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.board-detail-card .card-header {
+    /* background-color: #f8f9fa; */
+    border-bottom: 1px solid #dee2e6;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.board-detail-card .card-body {
+    padding: 20px;
+}
+
+.board-detail-card .card-text {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.board-detail-card .card-text strong {
+    font-weight: bold;
+}
+
+.board-detail-card .border {
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #f8f9fa;
+}
+
+.board-detail-card .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+.board-detail-card .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.board-detail-card .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+.board-detail-card .btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+.board-detail-card .modal-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.board-detail-card .modal-footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.board-detail-card .modal-title {
+    font-weight: bold;
+}
+
+.board-detail-card .form-control {
+    border-radius: 5px;
+}
+
+.board-detail-card h2 {
+    background: none;
+    border: none;
+}
+
+.board-detail-card p {
+    background: none;
+    border: none;
+}
+
+.board-detail-card .text-right {
+    text-align: right;
+}
+
+.form-label {
+    width: 100px; /* 적절히 늘려서 텍스트와 동일 선상에 오도록 조정 */
+    display: inline-block;
+}
+
+.bg-light { /* 게시글 본문 배경컬러 */
+    --bs-bg-opacity: 0;
+}
+
+card-header { /* 댓글 헤더 */
+    padding: var(--bs-card-cap-padding-y) var(--bs-card-cap-padding-x);
+    margin-bottom: 0;
+    color: var(--bs-card-cap-color);
+    background-color: var(--bs-card-cap-bg);
+}
+
+.btn-primary {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #80E5A8;
+    --bs-btn-border-color: #80E5A8;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #66d09d;
+    --bs-btn-hover-border-color: #66d09d;
+}
+
+.btn-info {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #80E5A8;
+    --bs-btn-border-color: #80E5A8;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #66d09d;
+    --bs-btn-hover-border-color: #66d09d;
 }

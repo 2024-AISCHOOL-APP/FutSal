@@ -66,7 +66,7 @@ const CreateTeam = () => {
   };
 
   return (
-    <div>
+    <div className="container">
       <h1>팀 생성</h1>
       <Form onSubmit={sendData}>
         <Form.Group className="mb-3">

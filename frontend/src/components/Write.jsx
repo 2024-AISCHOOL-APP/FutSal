@@ -4,6 +4,7 @@ import Form from 'react-bootstrap/Form';
 import axios from '../axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { BoardInfo } from '../BoardInfo';
+import '../css/board.css'
 
 const Write = () => {
     const { boardType, setBoardType, boardTitle, setBoardTitle, boardContent, setBoardContent, boardDate, setBoardDate, boardLike, setBoardLike } = useContext(BoardInfo);
@@ -64,7 +65,7 @@ const Write = () => {
     };
 
     return (
-        <div>
+        <div className='container'>
             <Form onSubmit={sendData}>
                 <Form.Group className="mb-3">
                     <Form.Label>게시글 타입</Form.Label>
@@ -93,6 +94,7 @@ const Write = () => {
                         as="textarea"
                         value={boardContent || ''} 
                         onChange={e => setBoardContent(e.target.value)}
+                        style={{height:'300px'}}
                     />
                 </Form.Group>
                 <Button variant="info" type="submit">작성완료</Button>

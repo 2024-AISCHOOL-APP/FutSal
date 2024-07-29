@@ -109,29 +109,31 @@ const Board = () => {
 
     return (
         <div className="container">
-            <Form.Group className="form-group">
-                <Form.Label className="form-label">게시글 타입</Form.Label>
-                <Form.Control
-                    as="select"
-                    value={selectedType}
-                    onChange={(e) => filterByType(Number(e.target.value))} // 정수로 변환하여 상태 업데이트
-                >
-                    <option value={0}>모두 보기</option>
-                    <option value={1}>공지게시판</option>
-                    <option value={2}>자유게시판</option>
-                    <option value={3}>용병게시판</option>
-                </Form.Control>
-            </Form.Group>
+            <div className="form-row">
+                <Form.Group className="form-group">
+                    <Form.Label className="form-label" style={{width:'200px'}}>게시글 타입</Form.Label>
+                    <Form.Control
+                        as="select"
+                        value={selectedType}
+                        onChange={(e) => filterByType(Number(e.target.value))} // 정수로 변환하여 상태 업데이트
+                    >
+                        <option value={0}>모두 보기</option>
+                        <option value={1}>공지게시판</option>
+                        <option value={2}>자유게시판</option>
+                        <option value={3}>용병게시판</option>
+                    </Form.Control>
+                </Form.Group>
 
-            <Form.Group>
-                <Form.Label>검색</Form.Label>
-                <Form.Control
-                    type="text"
-                    placeholder="제목 또는 작성자로 검색"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                />
-            </Form.Group>
+                <Form.Group className="search-group">
+                    <Form.Label className="form-label">검색</Form.Label>
+                    <Form.Control
+                        type="text"
+                        placeholder="제목 또는 작성자로 검색"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                </Form.Group>
+            </div>
 
             {/* 로딩 및 오류 처리 */}
             {loading && <p>로딩 중...</p>}
@@ -142,7 +144,7 @@ const Board = () => {
                     <tr>
                         <th>게시글 타입</th>
                         <th>작성자</th>
-                        <th>제목</th>
+                        <th style={{width:'41%'}}>제목</th>
                         <th>작성일</th>
                     </tr>
                 </thead>
@@ -155,8 +157,8 @@ const Board = () => {
                                 style={{ cursor: 'pointer' }}
                             >
                                 <td>{getBoardTypeName(post.board_type)}</td>
-                                <td>{post.user_id}</td>
-                                <td>{post.board_title}</td>
+                                <td className='truncate'>{post.user_id}</td>
+                                <td className='truncate'>{post.board_title}</td>
                                 <td>{formatDate(post.board_date)}</td>
                             </tr>
                         ))
@@ -169,11 +171,11 @@ const Board = () => {
             </Table>
 
             <div className="pagination">
-                <Button variant="primary" onClick={handlePreviousPage} disabled={currentPage === 1}>
+                <Button className="pagination-buttons" variant="primary" onClick={handlePreviousPage} disabled={currentPage === 1}>
                     이전
                 </Button>
                 <span className="pagination-info">페이지 {currentPage} / {totalPages}</span>
-                <Button variant="primary" onClick={handleNextPage} disabled={currentPage === totalPages}>
+                <Button className="pagination-buttons" variant="primary" onClick={handleNextPage} disabled={currentPage === totalPages}>
                     다음
                 </Button>
             </div>

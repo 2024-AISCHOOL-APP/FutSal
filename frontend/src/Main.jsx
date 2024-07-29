@@ -21,10 +21,9 @@ import BoardDetail from "./components/BoardDetail";
 import MyPage from "./components/MyPage";
 import Comment from "./components/Comment";
 import TeamList from "./components/TeamList";
-import NavbarUnLog from "./components/NavbarUnLog";
-import NavbarLog from "./components/NavbarLog";
 import WinRate from "./components/WinRate";
 import Evaluation from "./components/Evaluation";
+import NavMenu from "./components/NavMenu"
 
 const Main = () => {
   // UserInfo
@@ -226,7 +225,7 @@ const Main = () => {
                 }}
               >
                 <Header />
-                {isLoggedIn ? <NavbarLog /> : <NavbarUnLog />}
+                <NavMenu />
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="/signin" element={<SignIn />} />

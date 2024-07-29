@@ -3,6 +3,7 @@ import axios from '../axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, Spinner, Button, Modal, Form } from 'react-bootstrap';
 import Comment from './Comment'; // 댓글 컴포넌트 임포트
+import '../css/board.css'
 
 const getBoardTypeName = (type) => {
     const boardTypes = {
@@ -94,12 +95,12 @@ const BoardDetail = () => {
     }
 
     return (
-        <div>
-            <Card className="mt-4">
-                <Card.Header as="h2">{post.board_title}</Card.Header>
+        <div className='container'>
+            <Card className='mt-4 board-detail-card card border-0'>
+                <Card.Header as="h2" className='text-left p-0'>{post.board_title}</Card.Header>
                 <Card.Body>
-                    <div className="mb-3">
-                        <Card.Text>
+                    <div className="mb-3 text-right">
+                        <Card.Text style={{ fontSize: '0.8rem'}}>
                             <strong>작성자:</strong> {post.user_id}
                             &nbsp;<strong>게시글 타입:</strong> {getBoardTypeName(post.board_type)}
                             &nbsp;<strong>작성일:</strong> {formatDate(post.board_date)}
@@ -109,7 +110,7 @@ const BoardDetail = () => {
                         {post.board_content}
                     </Card.Text>
                     {isAuthor && (
-                        <div className="mt-3">
+                        <div className="mt-3 text-right">
                             <Button variant="primary" onClick={() => setShowEditModal(true)}>수정</Button>
                             <Button variant="danger" className="ml-2" onClick={handleDelete}>삭제</Button>
                         </div>
@@ -127,9 +128,9 @@ const BoardDetail = () => {
                             </Form.Group>
                         </Form>
                     </Modal.Body>
-                    <Modal.Footer>
+                    <Modal.Footer className='text-right'>
                         <Button variant="secondary" onClick={() => setShowEditModal(false)}>닫기</Button>
-                        <Button variant="primary" onClick={handleEdit}>저장</Button>
+                        <Button variant="primary" onClick={handleEdit} className="ml-2">저장</Button>
                     </Modal.Footer>
                 </Modal>
             </Card>
