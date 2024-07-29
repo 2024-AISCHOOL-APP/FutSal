@@ -92,6 +92,7 @@ router.post("/teamJoin", async (req, res) => {
       .json({ success: false, message: "서버 내부 오류가 발생했습니다." });
   }
 });
+
 router.get("/getApplys", (req, res) => {
   try {
     const sql =
@@ -149,7 +150,6 @@ router.post("/applyRefuse", (req, res) => {
   });
 });
 
-
 // 팀 목록 가져오기
 router.get("/teamlist", (req, res) => {
   const page = parseInt(req.query.page) || 1;
@@ -169,7 +169,9 @@ router.get("/teamlist", (req, res) => {
   conn.query(countSql, (countErr, countResults) => {
     if (countErr) {
       console.error("Database error:", countErr);
-      return res.status(500).json({ success: false, message: "Database error occurred" });
+      return res
+        .status(500)
+        .json({ success: false, message: "Database error occurred" });
     }
 
     const totalTeams = countResults[0].total;
@@ -178,11 +180,51 @@ router.get("/teamlist", (req, res) => {
     conn.query(sql, [limit, offset], (err, results) => {
       if (err) {
         console.error("Database error:", err);
-        return res.status(500).json({ success: false, message: "Database error occurred" });
+        return res
+          .status(500)
+          .json({ success: false, message: "Database error occurred" });
       }
       res.json({ success: true, teams: results, totalPages: totalPages });
     });
   });
+});
+
+router.get("/members", async (req, res) => {
+  console.log("Request received at /team/members"); // 요청 수신 로그
+  const teamId = req.query.teamId;
+
+  if (!teamId) {
+    console.log("teamId is required"); // teamId가 필요하다는 로그
+    return res
+      .status(400)
+      .json({ success: false, message: "teamId is required" });
+  }
+
+  try {
+    const sql = `
+          SELECT
+              user_nickName,
+              user_age,
+              user_height,
+              user_weight,
+              user_position,
+              user_shooting,
+              user_passing,
+              user_dribbling,
+              user_speed,
+              user_defending,
+              user_goalkeeping
+          FROM userInfo
+          WHERE team_id = ?
+      `;
+    const [results] = await db.query(sql, [teamId]);
+    res.json({ success: true, data: results });
+  } catch (error) {
+    console.error("Failed to fetch team members:", error); // 오류 로그
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to fetch team members" });
+  }
 });
 
 module.exports = router;

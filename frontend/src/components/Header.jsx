@@ -87,11 +87,6 @@ const Header = () => {
         </Link>
       </Button>
       <Button variant="dark">
-        <Link to="/team" style={{ color: "white", textDecoration: "none" }}>
-          확인용
-        </Link>
-      </Button>
-      <Button variant="dark">
         <Link to="/teamlist" style={{ color: "white", textDecoration: "none" }}>
           팀 목록
         </Link>
@@ -102,7 +97,10 @@ const Header = () => {
         </Link>
       </Button>
       <Button variant="dark">
-        <Link to="/evaluation" style={{ color: "white", textDecoration: "none" }}>
+        <Link
+          to="/evaluation"
+          style={{ color: "white", textDecoration: "none" }}
+        >
           평가(임시)
         </Link>
       </Button>

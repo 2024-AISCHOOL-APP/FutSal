@@ -1,13 +1,17 @@
-// ModalComponent.js
+// TeamApplyModal.jsx
 import React from "react";
 import { Modal, Button } from "react-bootstrap";
+// import "./ModalComponent.css"; // 커스텀 스타일 적용
 
-const ModalComponent = ({ show, handleClose, children }) => {
+const ModalComponent = ({ show, handleClose, children, size }) => {
   return (
-    <Modal show={show} onHide={handleClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>팀 가입 신청</Modal.Title>
-      </Modal.Header>
+    <Modal
+      className="custom-modal"
+      show={show}
+      onHide={handleClose}
+      size={size}
+    >
+      <Modal.Header closeButton></Modal.Header>
       <Modal.Body>{children}</Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>

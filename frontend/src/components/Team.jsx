@@ -1,13 +1,16 @@
 import React, { useContext, useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { TeamInfo } from "../TeamInfo";
 import axios from "../axios";
 import { UserInfo } from "../UserInfo";
 import ModalComponent from "./TeamApplyModal";
 import TeamApply from "./TeamApply";
+import TeamMembers from "./TeamMembers";
 
 const Team = () => {
+  const { teamId } = useParams(); // URL 파라미터에서 teamId를 가져옴
+
   const {
-    teamId,
     setTeamId,
     teamName,
     setTeamName,
@@ -19,6 +22,7 @@ const Team = () => {
     setTeamRecord,
     teamArea,
     setTeamArea,
+    setTeamManager,
     teamImg1,
     setTeamImg1,
     teamImg2,
@@ -29,6 +33,8 @@ const Team = () => {
 
   const [userId, setUserId] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [modalContent, setModalContent] = useState(null);
+  const [modalSize, setModalSize] = useState("lg");
 
   useEffect(() => {
     const fetchSessionData = async () => {
@@ -51,6 +57,9 @@ const Team = () => {
         const response = await axios.get("/team/teamInfo", {
           headers: {
             "x-session-id": sessionStorage.getItem("sessionId"),
+            params: {
+              teamId: teamId,
+            },
           },
         });
         console.log("Team data:", response.data);
@@ -64,6 +73,7 @@ const Team = () => {
           setTeamScore(teamData.team_score);
           setTeamRecord(teamData.team_record);
           setTeamArea(teamData.team_area);
+          setTeamManager(teamData.team_manager);
           setTeamImg1(teamData.team_img1);
           setTeamImg2(teamData.team_img2);
           setTeamText(teamData.team_text);
@@ -121,10 +131,12 @@ const Team = () => {
       alert("이미 가입 신청 하셨습니다.");
     }
   };
-
-  const handleShowModal = () => setShowModal(true);
+  const handleShowModal = (content, size = "lg") => {
+    setModalContent(content);
+    setModalSize(size);
+    setShowModal(true);
+  };
   const handleCloseModal = () => setShowModal(false);
-
   return (
     <div>
       <div>
@@ -134,7 +146,14 @@ const Team = () => {
         <div>팀 ID: {teamId}</div>
         <div>팀 지역: {teamArea}</div>
         <div>팀 기록: {teamRecord}</div>
-        <button onClick={handleShowModal}>가입 대기 </button>
+        <button
+          onClick={() => handleShowModal(<TeamMembers teamId={teamId} />, "xl")}
+        >
+          팀원 목록
+        </button>
+        <button onClick={() => handleShowModal(<TeamApply />)}>
+          신청 목록
+        </button>
         <button onClick={teamJoin}>가입 신청</button>
       </div>
 
@@ -153,8 +172,12 @@ const Team = () => {
         <div>이미지 2: {teamImg2}</div>
         <div>팀 설명: {teamText}</div>
       </div>
-      <ModalComponent show={showModal} handleClose={handleCloseModal}>
-        <TeamApply />
+      <ModalComponent
+        show={showModal}
+        handleClose={handleCloseModal}
+        size={modalSize}
+      >
+        {modalContent}
       </ModalComponent>
     </div>
   );
