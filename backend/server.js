@@ -10,6 +10,8 @@ const boardRoutes = require("./routes/board");
 const teamRouter = require("./routes/team");
 const apiRouter = require("./routes/api");
 const commentRouter = require("./routes/comment");
+const winrateRouter = require("./routes/winrate")
+const evaluationRouter = require('./routes/evaluation'); 
 
 // 6-1. 리액트 프로젝트 경로 설정
 app.use(express.json());
@@ -29,12 +31,14 @@ app.use((req, res, next) => {
 });
 
 // 4-3. 경로 설정
-app.use("/api", apiRouter);
 app.use("/", indexRouter);
+app.use("/api", apiRouter);
 app.use("/user", userRouter);
 app.use("/board", boardRoutes);
 app.use("/team", teamRouter);
 app.use("/coment", commentRouter);
+//app.use("/winrate", winrateRouter)
+app.use('/evaluation', evaluationRouter);
 
 app.use(express.static(path.join(__dirname, "..", "frontend", "build")));
 

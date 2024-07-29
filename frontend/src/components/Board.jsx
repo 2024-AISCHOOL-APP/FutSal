@@ -4,6 +4,7 @@ import Form from 'react-bootstrap/Form';
 import axios from '../axios';
 import { Link, useNavigate } from 'react-router-dom';
 import '../css/board.css'
+import { Button } from 'react-bootstrap';
 
 // 게시글 타입 숫자를 문자열로 변환하는 함수
 const getBoardTypeName = (type) => {
@@ -122,6 +123,16 @@ const Board = () => {
                 </Form.Control>
             </Form.Group>
 
+            <Form.Group>
+                <Form.Label>검색</Form.Label>
+                <Form.Control
+                    type="text"
+                    placeholder="제목 또는 작성자로 검색"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
+            </Form.Group>
+
             {/* 로딩 및 오류 처리 */}
             {loading && <p>로딩 중...</p>}
             {error && <p style={{ color: 'red' }}>{error}</p>}
@@ -156,6 +167,16 @@ const Board = () => {
                     )}
                 </tbody>
             </Table>
+
+            <div className="pagination">
+                <Button variant="primary" onClick={handlePreviousPage} disabled={currentPage === 1}>
+                    이전
+                </Button>
+                <span className="pagination-info">페이지 {currentPage} / {totalPages}</span>
+                <Button variant="primary" onClick={handleNextPage} disabled={currentPage === totalPages}>
+                    다음
+                </Button>
+            </div>
 
             <div className='button-write'>
                 <Link to='/write'>글쓰기</Link>

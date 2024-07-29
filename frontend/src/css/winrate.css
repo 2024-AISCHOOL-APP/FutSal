@@ -1,0 +1,21 @@
+/* WinRate.css */
+.win-rate-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.team-info {
+    width: 45%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.opponent-team {
+    background-color: #f8d7da;
+}
+
+.our-team {
+    background-color: #d4edda;
+}

@@ -23,6 +23,8 @@ import Comment from "./components/Comment";
 import TeamList from "./components/TeamList";
 import NavbarUnLog from "./components/NavbarUnLog";
 import NavbarLog from "./components/NavbarLog";
+import WinRate from "./components/WinRate";
+import Evaluation from "./components/Evaluation";
 
 const Main = () => {
   // UserInfo
@@ -60,6 +62,15 @@ const Main = () => {
   const [matchId, setMatchId] = useState(null);
   const [matchDate, setMatchDate] = useState(null);
   const [matchPlace, setMatchPlace] = useState(null);
+  const [matchNum, setMatchNum] = useState(null);
+  const [matchResult, setMatchResult] = useState(null);
+  const [matchShooting, setMatchShooting] = useState(null);
+  const [matchPassing, setMatchPassing] = useState(null);
+  const [matchDribbling, setMatchDribbling] = useState(null);
+  const [matchSpeed, setMatchSpeed] = useState(null);
+  const [matchDefending, setMatchDefending] = useState(null);
+  const [matchGoalkeeper, setMatchGoalkeeper] = useState(null);
+
   // JoinInfo
   const [joinId, setJoinId] = useState(null);
   const [joinDate, setJoinDate] = useState(null);
@@ -154,6 +165,22 @@ const Main = () => {
             setMatchDate,
             matchPlace,
             setMatchPlace,
+            matchNum,
+            setMatchNum,
+            matchResult,
+            setMatchResult,
+            matchShooting,
+            setMatchShooting,
+            matchPassing,
+            setMatchPassing,
+            matchDribbling,
+            setMatchDribbling,
+            matchSpeed,
+            setMatchSpeed,
+            matchDefending,
+            setMatchDefending,
+            matchGoalkeeper,
+            setMatchGoalkeeper
           }}
         >
           <JoinInfo.Provider
@@ -213,6 +240,8 @@ const Main = () => {
                   <Route path="/teamapply" element={<TeamApply />} />
                   <Route path="/mypage" element={<MyPage />}></Route>
                   <Route path="/comment/:boardId" element={<Comment />} />
+                  <Route path='/winrate' element={<WinRate />}></Route>
+                  <Route path='/evaluation' element={<Evaluation />}></Route>
                 </Routes>
                 {/* <MainContent /> */}
               </BoardInfo.Provider>

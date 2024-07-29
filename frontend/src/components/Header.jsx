@@ -96,6 +96,16 @@ const Header = () => {
           팀 목록
         </Link>
       </Button>
+      <Button variant="dark">
+        <Link to="/winrate" style={{ color: "white", textDecoration: "none" }}>
+          승률(임시)
+        </Link>
+      </Button>
+      <Button variant="dark">
+        <Link to="/evaluation" style={{ color: "white", textDecoration: "none" }}>
+          평가(임시)
+        </Link>
+      </Button>
     </div>
   );
 };

@@ -4,6 +4,18 @@ import SelfStats from "../components/SelfStats";
 import axios from "../axios";
 import { UserInfo } from "../UserInfo";
 import { useNavigate } from "react-router-dom";
+import { Radar } from "react-chartjs-2";
+import {Chart as ChartJS,
+        RadarController,
+        RadialLinearScale,
+        PointElement,
+        LineElement,
+        Filler,
+        plugins
+} from 'chart.js';
+
+// Chart.js 구성 요소 등록
+ChartJS.register(RadarController, RadialLinearScale, LineElement, PointElement, Filler);
 
 const MyPage = () => {
   const [currentPage, setCurrentPage] = useState("default");
@@ -100,6 +112,36 @@ const MyPage = () => {
     setCurrentPage("selfstats");
   }
 
+  const data = {
+    labels: ['Shooting', 'Passing', 'Dribbling', 'Speed', 'Defending', 'Goalkeeping'],
+    datasets: [
+      {
+        label: 'User Stats',
+        data: [userShooting, userPassing, userDribbling, userSpeed, userDefending, userGoalkeeping],
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgba(255, 99, 132, 1.5)',
+        borderWidth: 1.5,
+        
+      }
+    ]
+  };
+
+  const options = {
+    responsive: false,
+    plugins : {
+      
+    },
+    scales: {
+      r: {
+        angleLines: {
+          display: false
+        },
+        suggestedMin: 0,
+        suggestedMax: 3
+      }
+    }
+  };
+
   return (
     <div>
       <div>
@@ -112,8 +154,14 @@ const MyPage = () => {
       </div>
 
       <div>
-        <div>개인 스탯 차트 구현 공간</div>
+        {/* 개인 스탯 차트 구현 공간 */}
+        {currentPage === "selfstats" && (
+          <div>
+            <Radar data={data} options={options} style={{position:'relative', height:'600px', width:'700px', fontWeight:'bold'}} />
+          </div>
+        )}
       </div>
+
 
       <div>
         {currentPage === "default" && <div>기본 페이지 내용</div>}
