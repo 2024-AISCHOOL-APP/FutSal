@@ -23,7 +23,8 @@ import Comment from "./components/Comment";
 import TeamList from "./components/TeamList";
 import WinRate from "./components/WinRate";
 import Evaluation from "./components/Evaluation";
-import NavMenu from "./components/NavMenu"
+import NavMenu from "./components/NavMenu";
+import KakaoMap from "./components/KakaoMap";
 
 const Main = () => {
   // UserInfo
@@ -179,7 +180,7 @@ const Main = () => {
             matchDefending,
             setMatchDefending,
             matchGoalkeeper,
-            setMatchGoalkeeper
+            setMatchGoalkeeper,
           }}
         >
           <JoinInfo.Provider
@@ -239,8 +240,10 @@ const Main = () => {
                   <Route path="/teamapply" element={<TeamApply />} />
                   <Route path="/mypage" element={<MyPage />}></Route>
                   <Route path="/comment/:boardId" element={<Comment />} />
-                  <Route path='/winrate' element={<WinRate />}></Route>
-                  <Route path='/evaluation' element={<Evaluation />}></Route>
+                  <Route path="/winrate" element={<WinRate />}></Route>
+                  <Route path="/evaluation" element={<Evaluation />}></Route>
+                  <Route path="/home" element={<Home />}></Route>
+                  <Route path="/map" element={<KakaoMap />}></Route>
                 </Routes>
                 {/* <MainContent /> */}
               </BoardInfo.Provider>
