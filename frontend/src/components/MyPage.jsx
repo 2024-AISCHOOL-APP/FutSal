@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
-import Update from "../components/Update";
-import SelfStats from "../components/SelfStats";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "../axios";
 import { UserInfo } from "../UserInfo";
-import { useNavigate } from "react-router-dom";
+import Update from "./Update";
+import SelfStats from "./SelfStats";
 import { Radar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -15,8 +15,10 @@ import {
 } from 'chart.js';
 import "../css/mypage.css";
 
+
 // Chart.js 구성 요소 등록
 ChartJS.register(RadarController, RadialLinearScale, LineElement, PointElement, Filler);
+
 
 const MyPage = () => {
   const [currentPage, setCurrentPage] = useState("default");
@@ -55,15 +57,15 @@ const MyPage = () => {
             "x-session-id": sessionStorage.getItem("sessionId"),
           },
         });
+        console.log(userId);
         setUserId(response.data.userId);
-        sessionStorage.setItem("userId", response.data.userId);
+        sessionStorage.setItem("userId", response.data.userId); // 세션에 userId 저장
       } catch (error) {
         console.error("Failed to fetch user ID:", error);
         alert("로그인 하셔야 마이 페이지를 확인할 수 있습니다");
         nav("/home");
       }
     };
-
     const fetchUserData = async () => {
       try {
         const response = await axios.post(
@@ -97,20 +99,19 @@ const MyPage = () => {
         console.error("Failed to fetch user data:", error);
       }
     };
-
     const initialize = async () => {
       await fetchSessionData();
       await fetchUserData();
     };
 
     initialize();
-  }, [nav, setUserId, setTeamId, setUserNickname, setUserImg, setUserShooting, setUserPassing, setUserDribbling, setUserSpeed, setUserDefending, setUserGoalkeeping]);
+  }, [nav, setUserId, setUserNickname, setUserImg]);
 
-  const upDate = () => {
+  const showUpdatePage = () => {
     setCurrentPage("update");
   };
 
-  const selfStats = () => {
+  const showSelfStatsPage = () => {
     setCurrentPage("selfstats");
   };
 
@@ -127,46 +128,87 @@ const MyPage = () => {
   };
 
   const options = {
-    responsive: true,
-    elements: {
-      line: {
-        borderWidth: 1,
-      },
-    },
     scales: {
       r: {
         angleLines: {
-          display: true
+          display: true,
         },
-        suggestedMin: 0, // 최소값 설정
-        suggestedMax: 100, // 최대값 설정
         ticks: {
-          stepSize: 10,
-          beginAtZero: true
-        }
-      }
-    }
+          display: true,
+        },
+        pointLabels: {
+          display: false,
+        },
+        suggestedMin: 0,
+        suggestedMax: 100,
+      },
+    },
+    plugins: {
+      legend: {
+        display: false, // 범례 숨김
+      },
+    },
+    maintainAspectRatio: false,
+    responsive: true,
   };
 
+
+
   return (
-    <div>
-      <div>
-        <div>회원 아이콘 : {userImg}</div>
-        <div>회원 닉네임 : {userNickname}</div>
-        <button onClick={upDate}>회원정보 수정</button>
-        <button onClick={selfStats}>나의 스탯</button>
-        <button>회원 탈퇴</button>
-        <div>소속 팀-클릭 시 팀 페이지 이동 : {teamName}</div>
-      </div>
+    <div id="mypage_container">
+      <div id="mypage_container_left">
+        <div id="mypage_container_left_up">
+          <div id="mypage_container_logo_box">
+            <img
+              src={
+                userImg
+                  ? `${process.env.PUBLIC_URL}${userImg}`
+                  : `${process.env.PUBLIC_URL}/image/userImage/default_profile.png`
+              }
+              alt="User Icon"
+            />
+          </div>
 
-      <div>
-          <Radar data={data} options={options} style={{ position: 'relative', width: '500px', height: '250px' }} />
-      </div>
+          <div id="mypage_links">
+            <br />
+            <Link to="/teampage" className="mypage-link">
+              팀페이지
+            </Link>
+            <button onClick={showUpdatePage} className="mypage-link">
+              회원정보 수정하기
+            </button>
+            <button onClick={showSelfStatsPage} className="mypage-link">
+              능력치 등록
+            </button>
+          </div>
+        </div>
 
-      <div>
-        {currentPage === "default" && <div>기본 페이지 내용</div>}
-        {currentPage === "update" && <Update />}
-        {currentPage === "selfstats" && <SelfStats />}
+        <div id="mypage_container_left_down">
+          <div id="mypage_container_left_down_box">
+            <div id="mypage_container_left_down_hex">
+              <Radar data={data} options={options}/>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div id="mypage_container_right">
+        {currentPage === "default" && (
+          <div className="right-content">
+            <h2>마이페이지</h2>
+            <p>왼쪽 메뉴에서 원하는 항목을 선택하세요.</p>
+          </div>
+        )}
+        {currentPage === "update" && (
+          <div className="right-content">
+            <Update />
+          </div>
+        )}
+        {currentPage === "selfstats" && (
+          <div className="right-content">
+            <SelfStats />
+          </div>
+        )}
       </div>
     </div>
   );

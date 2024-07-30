@@ -61,9 +61,6 @@ textarea {
     gap: 5px;
 }
 
-input[type="radio"] {
-    display: none;
-}
 
 .radio-text {
     padding: 5px 10px;
