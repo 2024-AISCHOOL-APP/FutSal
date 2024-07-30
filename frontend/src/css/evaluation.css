@@ -62,7 +62,7 @@ textarea {
 }
 
 input[type="radio"] {
-    display: none;
+    /* display: none; */
 }
 
 .radio-text {
