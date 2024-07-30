@@ -1,12 +1,38 @@
-// 4-3. User페이지 경로 설정
-// 프론트에서 입력한 데이터를 가져와 출력
 const express = require("express");
 const router = express.Router();
 const conn = require("../config/database");
 const sessionStore = require("../sessionStore"); // 세션 스토어 불러오기
 const bcrypt = require("bcrypt");
 
-router.post("/handleSignIn", (req, res) => {
+// 아이디 중복 확인
+router.post("/checkId", (req, res) => {
+  const { userId } = req.body;
+  const sql = `SELECT COUNT(*) AS count FROM userInfo WHERE user_id = ?`;
+  conn.query(sql, [userId], (err, results) => {
+    if (err) {
+      console.error("SQL Error:", err);
+      return res.status(500).json({ success: false, message: "Database error occurred" });
+    }
+    const isUnique = results[0].count === 0;
+    res.json({ isUnique });
+  });
+});
+
+// 닉네임 중복 확인
+router.post("/checkNickname", (req, res) => {
+  const { userNickname } = req.body;
+  const sql = `SELECT COUNT(*) AS count FROM userInfo WHERE user_nickname = ?`;
+  conn.query(sql, [userNickname], (err, results) => {
+    if (err) {
+      console.error("SQL Error:", err);
+      return res.status(500).json({ success: false, message: "Database error occurred" });
+    }
+    const isUnique = results[0].count === 0;
+    res.json({ isUnique });
+  });
+});
+
+router.post("/handleSignIn", async (req, res) => {
   console.log("handleSignIn", req.body);
   const { userId, userPw } = req.body;
 
@@ -18,36 +44,24 @@ router.post("/handleSignIn", (req, res) => {
   conn.query(sql, [userId], async (err, rows) => {
     if (err) {
       console.error("SQL Error:", err);
-      return res
-        .status(500)
-        .json({ success: false, message: "Database error occurred" });
+      return res.status(500).json({ success: false, message: "Database error occurred" });
     }
     if (rows.length > 0) {
       const user = rows[0];
-
       // 비밀번호 비교
       const match = await bcrypt.compare(userPw, user.user_pw);
       if (match) {
         console.log("로그인 성공");
         const sessionId = new Date().getTime().toString(); // 간단한 세션 ID 생성
         sessionStore[sessionId] = { user: rows[0] };
-        res.json({
-          success: true,
-          sessionId,
-        });
+        res.json({ success: true, sessionId });
       } else {
         console.log("로그인 실패: 비밀번호 불일치");
-        res.json({
-          success: false,
-          message: "Invalid credentials",
-        });
+        res.json({ success: false, message: "Invalid credentials" });
       }
     } else {
       console.log("로그인 실패: 사용자 없음");
-      res.json({
-        success: false,
-        message: "User not found",
-      });
+      res.json({ success: false, message: "User not found" });
     }
   });
 });
@@ -89,9 +103,7 @@ router.post("/handleSignUp", async (req, res) => {
       (err, results) => {
         if (err) {
           console.error("SQL Error:", err);
-          return res
-            .status(500)
-            .json({ success: false, message: "Database error occurred" });
+          return res.status(500).json({ success: false, message: "Database error occurred" });
         }
         console.log("SQL Results:", results);
         res.json({ success: true });
@@ -99,12 +111,10 @@ router.post("/handleSignUp", async (req, res) => {
     );
   } catch (err) {
     console.error("Error during password hashing:", err);
-    res.status(500).json({
-      success: false,
-      message: "Error occurred during sign-up process",
-    });
+    res.status(500).json({ success: false, message: "Error occurred during sign-up process" });
   }
 });
+
 router.post("/SelfStats", (req, res) => {
   console.log(req.body);
   const {
@@ -140,9 +150,7 @@ router.post("/SelfStats", (req, res) => {
     (err) => {
       if (err) {
         console.error("SQL Error:", err);
-        return res
-          .status(500)
-          .json({ success: false, message: "Database error occurred" });
+        return res.status(500).json({ success: false, message: "Database error occurred" });
       }
       res.json({ success: true });
     }
@@ -168,9 +176,7 @@ router.post("/handleUpdate", (req, res) => {
   bcrypt.hash(userPw, saltRounds, (err, hashedPw) => {
     if (err) {
       console.error("Hashing error:", err);
-      return res
-        .status(500)
-        .json({ success: false, message: "Password hashing error occurred" });
+      return res.status(500).json({ success: false, message: "Password hashing error occurred" });
     }
 
     const sql = `
@@ -195,9 +201,7 @@ router.post("/handleUpdate", (req, res) => {
       (err, results) => {
         if (err) {
           console.error("SQL Error:", err);
-          return res
-            .status(500)
-            .json({ success: false, message: "Database error occurred" });
+          return res.status(500).json({ success: false, message: "Database error occurred" });
         }
         res.json({ success: true });
       }
@@ -209,21 +213,15 @@ router.post("/userInfo", (req, res) => {
   const { userId } = req.body;
 
   try {
-    const userSql = `
-      SELECT * FROM userInfo WHERE user_id = ?
-    `;
+    const userSql = `SELECT * FROM userInfo WHERE user_id = ?`;
     conn.query(userSql, [userId], (err, userResults) => {
       if (err) {
         console.error("Database error:", err); // 데이터베이스 오류 로깅
-        return res
-          .status(500)
-          .json({ success: false, message: "Database error occurred" });
+        return res.status(500).json({ success: false, message: "Database error occurred" });
       }
 
       if (userResults.length === 0) {
-        return res
-          .status(404)
-          .json({ success: false, message: "User not found" });
+        return res.status(404).json({ success: false, message: "User not found" });
       }
 
       const userInfo = userResults[0];
@@ -234,21 +232,15 @@ router.post("/userInfo", (req, res) => {
         return res.json({ success: true, data: userInfo });
       }
 
-      const teamSql = `
-        SELECT team_name FROM teamInfo WHERE team_id = ?
-      `;
+      const teamSql = `SELECT team_name FROM teamInfo WHERE team_id = ?`;
       conn.query(teamSql, [teamId], (err, teamResults) => {
         if (err) {
           console.error("Database error:", err); // 데이터베이스 오류 로깅
-          return res
-            .status(500)
-            .json({ success: false, message: "Database error occurred" });
+          return res.status(500).json({ success: false, message: "Database error occurred" });
         }
 
         if (teamResults.length === 0) {
-          return res
-            .status(404)
-            .json({ success: false, message: "Team not found" });
+          return res.status(404).json({ success: false, message: "Team not found" });
         }
 
         userInfo.team_name = teamResults[0].team_name;
@@ -259,6 +251,51 @@ router.post("/userInfo", (req, res) => {
   } catch (err) {
     res.status(500).json({ success: false, message: "An error occurred" });
   }
+});
+
+// 비밀번호 재설정 요청
+router.post("/password-reset-request", (req, res) => {
+  const { userId, nickname } = req.body;
+
+  const sql = 'SELECT user_id, user_nickname FROM userInfo WHERE user_id = ? AND user_nickname = ?';
+
+  conn.query(sql, [userId, nickname], (err, results) => {
+    if (err) {
+      console.error("SQL Error:", err);
+      return res.status(500).json({ success: false, message: "Database error occurred" });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    res.json({ success: true });
+  });
+});
+
+// 비밀번호 재설정
+router.post("/password-reset", (req, res) => {
+  const { userId, newPassword } = req.body;
+
+  const saltRounds = 10;
+
+  bcrypt.hash(newPassword, saltRounds, (err, hashedPassword) => {
+    if (err) {
+      console.error("Hashing error:", err);
+      return res.status(500).json({ success: false, message: "Hashing error occurred" });
+    }
+
+    const sql = 'UPDATE userInfo SET user_pw = ? WHERE user_id = ?';
+
+    conn.query(sql, [hashedPassword, userId], (err, results) => {
+      if (err) {
+        console.error("SQL Error:", err);
+        return res.status(500).json({ success: false, message: "Database error occurred" });
+      }
+
+      res.json({ success: true });
+    });
+  });
 });
 
 module.exports = router;

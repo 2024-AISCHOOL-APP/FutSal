@@ -25,6 +25,7 @@ import WinRate from "./components/WinRate";
 import Evaluation from "./components/Evaluation";
 import NavMenu from "./components/NavMenu";
 import KakaoMap from "./components/KakaoMap";
+import SelfStats from "./components/SelfStats";
 
 const Main = () => {
   // UserInfo
@@ -244,6 +245,7 @@ const Main = () => {
                   <Route path="/evaluation" element={<Evaluation />}></Route>
                   <Route path="/home" element={<Home />}></Route>
                   <Route path="/map" element={<KakaoMap />}></Route>
+                  <Route path="/selfstats" element={<SelfStats />}></Route>
                 </Routes>
                 {/* <MainContent /> */}
               </BoardInfo.Provider>
