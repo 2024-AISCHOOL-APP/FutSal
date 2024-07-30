@@ -67,39 +67,41 @@ const CreateTeam = () => {
 
   return (
     <div className="container">
-      <h1>팀 생성</h1>
-      <Form onSubmit={sendData}>
-        <Form.Group className="mb-3">
-          <Form.Label>팀 이름</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Teamname"
-            onChange={(e) => setTeamName(e.target.value)}
-          />
-        </Form.Group>
+      <div className="signup-form-container">
+        <h1>팀 생성</h1>
+        <Form onSubmit={sendData}>
+          <Form.Group className="mb-3">
+            <Form.Label>팀 이름</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Teamname"
+              onChange={(e) => setTeamName(e.target.value)}
+            />
+          </Form.Group>
 
-        <Form.Group className="mb-3">
-          <Form.Label>팀 사진</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Image URL"
-            onChange={(e) => setTeamIcon(e.target.value)}
-          />
-        </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>팀 사진</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Image URL"
+              onChange={(e) => setTeamIcon(e.target.value)}
+            />
+          </Form.Group>
 
-        <Form.Group className="mb-3">
-          <Form.Label>주 활동 지역</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Area"
-            onChange={(e) => setTeamArea(e.target.value)}
-          />
-        </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>주 활동 지역</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Area"
+              onChange={(e) => setTeamArea(e.target.value)}
+            />
+          </Form.Group>
 
-        <Button variant="primary" type="submit">
-          팀 생성
-        </Button>
-      </Form>
+          <Button variant="primary" type="submit">
+            팀 생성
+          </Button>
+        </Form>
+      </div>
     </div>
   );
 };

@@ -1,5 +1,80 @@
 /* WinRate.css */
-.win-rate-container {
+
+.team-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.win-rate h1 {
+    font-size: 2.5rem;
+    color: #ff0000;
+    /* 강조를 위해 색상 변경 */
+}
+
+.team-icon img {
+    border-radius: 50%;
+    border: 2px solid #ccc;
+}
+
+.stats .stat {
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+}
+
+.stats .bar-container {
+    flex-grow: 1;
+    height: 20px;
+    background-color: #e9ecef;
+    margin-left: 10px;
+    position: relative;
+}
+
+.stats .bar {
+    height: 100%;
+    background-color: hsl(195, 100%, 50%);
+    /* 그래프 색상 */
+}
+
+.divider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.vertical-divider {
+    width: 1px;
+    height: 100%;
+    background-color: #000;
+}
+
+.stats.reverse .stat {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+}
+
+.stats.reverse .bar-container {
+    margin-right: 10px;
+    margin-left: 0;
+    transform: scaleX(-1); /* 그래프 좌우반전 */
+}
+
+.stats.reverse .bar {
+    background-color: hsl(195, 100%, 50%);
+    /* 그래프 색상 */
+}
+
+
+
+
+
+
+
+
+
+/* 현준 css 혹시 몰라 주석처리 */
+/* .win-rate-container {
     display: flex;
     justify-content: space-between;
     padding: 20px;
@@ -18,4 +93,4 @@
 
 .our-team {
     background-color: #d4edda;
-}
+} */

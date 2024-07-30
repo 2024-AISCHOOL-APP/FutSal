@@ -1,0 +1,21 @@
+.ta-btn {
+    width: 55px;
+    color: black;
+    margin-right: 10px;
+}
+
+.ta-btn:hover {
+    color: black
+}
+
+.ta-btn-refusal {
+    background-color: #F78181;
+    border-color: #F78181;
+    color: white;
+}
+
+.ta-btn-refusal:hover {
+    background-color: red;
+    border-color: red;
+    color: white;
+}

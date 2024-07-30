@@ -6,6 +6,8 @@ import { UserInfo } from "../UserInfo";
 import ModalComponent from "./TeamApplyModal";
 import TeamApply from "./TeamApply";
 import TeamMembers from "./TeamMembers";
+import '../css/team.css'
+import { Button } from "react-bootstrap";
 
 const Team = () => {
   const { teamId } = useParams(); // URL 파라미터에서 teamId를 가져옴
@@ -138,47 +140,57 @@ const Team = () => {
   };
   const handleCloseModal = () => setShowModal(false);
   return (
-    <div>
-      <div>
-        <h1>팀 정보</h1>
-        <div>팀 아이콘: {teamIcon}</div>
-        <div>팀 이름: {teamName}</div>
-        <div>팀 ID: {teamId}</div>
-        <div>팀 지역: {teamArea}</div>
-        <div>팀 기록: {teamRecord}</div>
-        <button
-          onClick={() => handleShowModal(<TeamMembers teamId={teamId} />, "xl")}
-        >
-          팀원 목록
-        </button>
-        <button onClick={() => handleShowModal(<TeamApply />)}>
-          신청 목록
-        </button>
-        <button onClick={teamJoin}>가입 신청</button>
-      </div>
+    <div className="container contai">
+      <div className="leftSection">
+        <div className="teamInfo">
+          <div className="teamIconName">
+            {/* <div className="teamIcon">팀 아이콘: {teamIcon}</div>  <- DB 받아오면 이거 쓰기 */}
+            <div className="teamIcon">
+              <img src={process.env.PUBLIC_URL + '/profileIcon.png'} width="150px" alt="profile-icon" />
+            </div>
+            <div className="teamName">
+              <h3>{teamName}</h3>
+            </div>
+          </div>
+          <div className="teamDetails">
+            <div>◾️ 팀 ID: {teamId}</div>
+            <div>◾️ 팀 지역: {teamArea}</div>
+            <div>◾️ 팀 기록: {teamRecord}</div>
+          </div>
+          <Button className="team-btn"
+            onClick={() => handleShowModal(<TeamMembers teamId={teamId} />, "xl")}>
+            팀원 목록
+          </Button>
+          <Button className="team-btn" onClick={() => handleShowModal(<TeamApply />)}>
+            신청 목록
+          </Button>
+          <Button className="team-btn" onClick={teamJoin}>가입 신청</Button>
+        </div>
 
-      <div>
-        <h2>팀 점수</h2>
-        <div>{teamScore}</div>
-        <div>
-          요기는 차트 구현-팀 가입은 스탯 안적어도 가입되게 하고 스탯창 적용은
-          마이페이지에서 셋팅해야 적용되게 적용
+        <div className="teamInfo mt-3">
+          <h2>팀 점수</h2>
+          <div>{teamScore}</div>
+          <div>
+            요기는 차트 구현-팀 가입은 스탯 안적어도 가입되게 하고 스탯창 적용은
+            마이페이지에서 셋팅해야 적용되게 적용
+          </div>
         </div>
       </div>
 
-      <div>
-        <h2>팀 이미지 및 설명</h2>
-        <div>이미지 1: {teamImg1}</div>
-        <div>이미지 2: {teamImg2}</div>
-        <div>팀 설명: {teamText}</div>
+      <div className="rightSection">
+        <div className="teamImagesAndText">
+          <div className="teamImages">
+            {/* <img src={teamImg1} alt="팀 이미지 1" <- DB 받아오면 이거 쓰기 />
+            <img src={teamImg2} alt="팀 이미지 2" /> */}
+            <img src={'/ggami.jpg'} alt="팀 이미지 1" />
+            <img src={'/myTeam.png'} alt="팀 이미지 2" />
+          </div>
+          <div className="teamText">{teamText}</div>
+        </div>
+        <ModalComponent show={showModal} handleClose={handleCloseModal} size={modalSize}>
+          {modalContent}
+        </ModalComponent>
       </div>
-      <ModalComponent
-        show={showModal}
-        handleClose={handleCloseModal}
-        size={modalSize}
-      >
-        {modalContent}
-      </ModalComponent>
     </div>
   );
 };

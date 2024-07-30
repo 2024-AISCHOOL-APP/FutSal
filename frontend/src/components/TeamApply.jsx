@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Table from "react-bootstrap/Table";
 import axios from "../axios";
+import { Button } from "react-bootstrap";
+import '../css/teamapply.css'
 
 const TeamApply = () => {
   const [teamApplys, setTeamApplys] = useState([]);
@@ -60,8 +62,8 @@ const TeamApply = () => {
               <td>{apply.user_id}</td>
               <td>{apply.join_date}</td>
               <td>
-                <button onClick={() => applyOk(apply.user_id)}>허가</button>
-                <button onClick={() => applyNope(apply.user_id)}>거절</button>
+                <Button className="ta-btn" onClick={() => applyOk(apply.user_id)}>허가</Button>
+                <Button className="ta-btn ta-btn-refusal" onClick={() => applyNope(apply.user_id)}>거절</Button>
               </td>
             </tr>
           ))}
