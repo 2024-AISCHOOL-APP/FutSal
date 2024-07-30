@@ -261,4 +261,29 @@ router.post("/userInfo", (req, res) => {
   }
 });
 
+
+router.post("/data",(req,res)=>{
+  const { userId } = req.body;
+  const sql = `
+  SELECT user_age, user_height, user_weight
+  FROM userInfo
+  WHERE user_id = ?;
+  `
+  conn.query(sql,[userId],(err,results)=>{
+    if (err) {
+      console.error("Database error:", err); // 데이터베이스 오류 로깅
+      return res
+        .status(500)
+        .json({ success: false, message: "Database error occurred" });
+    }
+
+    if (results.length === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Team not found" });
+    }
+
+    res.json({success: true,data: results[0] })
+  })
+})
 module.exports = router;
