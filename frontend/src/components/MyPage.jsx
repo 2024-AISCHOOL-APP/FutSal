@@ -4,6 +4,7 @@ import axios from "../axios";
 import { UserInfo } from "../UserInfo";
 import Update from "./Update";
 import SelfStats from "./SelfStats";
+<<<<<<< HEAD
 import { Radar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -20,6 +21,10 @@ import "../css/mypage.css";
 ChartJS.register(RadarController, RadialLinearScale, LineElement, PointElement, Filler);
 
 
+=======
+import "../css/mypage.css";
+
+>>>>>>> b266125a3ee894f8c5daf841889de6a088507acc
 const MyPage = () => {
   const [currentPage, setCurrentPage] = useState("default");
   const nav = useNavigate();
@@ -115,6 +120,7 @@ const MyPage = () => {
     setCurrentPage("selfstats");
   };
 
+<<<<<<< HEAD
   const data = {
     labels: ['Shooting', 'Passing', 'Dribbling', 'Speed', 'Defending', 'Goalkeeping'],
     datasets: [
@@ -154,6 +160,8 @@ const MyPage = () => {
 
 
 
+=======
+>>>>>>> b266125a3ee894f8c5daf841889de6a088507acc
   return (
     <div id="mypage_container">
       <div id="mypage_container_left">
@@ -182,6 +190,7 @@ const MyPage = () => {
             </button>
           </div>
         </div>
+<<<<<<< HEAD
 
         <div id="mypage_container_left_down">
           <div id="mypage_container_left_down_box">
@@ -191,6 +200,13 @@ const MyPage = () => {
           </div>
         </div>
 
+=======
+        <div id="mypage_container_left_down">
+          <div id="mypage_container_left_down_box">
+            <div id="mypage_container_left_down_hex"></div>
+          </div>
+        </div>
+>>>>>>> b266125a3ee894f8c5daf841889de6a088507acc
       </div>
       <div id="mypage_container_right">
         {currentPage === "default" && (

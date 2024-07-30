@@ -61,6 +61,12 @@ textarea {
     gap: 5px;
 }
 
+<<<<<<< HEAD
+=======
+input[type="radio"] {
+    /* display: none; */
+}
+>>>>>>> b266125a3ee894f8c5daf841889de6a088507acc
 
 .radio-text {
     padding: 5px 10px;

@@ -22,7 +22,13 @@ const SelfStats = () => {
     userDefending,
     setUserDefending,
     userGoalkeeping,
-    setUserGoalkeeping
+    setUserGoalkeeping,
+    userAge,
+    setUserAge,
+    userHeight,
+    setUserHeight,
+    userWeight,
+    setUserWeight,
   } = useContext(UserInfo);
 
   const [selectedShooting, setSelectedShooting] = useState(userShooting);
@@ -89,6 +95,7 @@ const SelfStats = () => {
     }
   };
 
+
   const sendData = async (e) => {
     e.preventDefault();
 
@@ -112,6 +119,53 @@ const SelfStats = () => {
           },
         }
       );
+      const getResponse = await axios.post('/user/data',{
+        userId: userId,
+      },{
+        headers: {
+          "x-session-id": sessionStorage.getItem("sessionId"),
+
+        },
+      });
+      if (getResponse.data.success) {
+        const datafromData = getResponse.data.data;
+        console.log("User data success:", datafromData);
+        setUserAge(datafromData.user_age);
+        setUserHeight(datafromData.user_height);
+        setUserWeight(datafromData.user_weight);
+        console.log("Updated userId:", datafromData.user_id);
+      } else {
+        console.error("Failed to fetch team data:", getResponse.data.message);
+      }
+
+      const response2flask = await axios.post(
+        `http://localhost:5000/predict_at`,    
+
+        {
+
+          userAge: userAge,
+          userHeight: userHeight,
+          userWeight: userWeight,
+          userPosition: userPosition,
+          userShooting: userShooting,
+          userPassing: userPassing,
+          userDribbling: userDribbling,
+          userSpeed: userSpeed,
+          userDefending: userDefending,
+          userGoalkeeping: userGoalkeeping,
+          userId: userId,
+        },
+        {
+          headers: {
+            "x-session-id": sessionStorage.getItem("sessionId"),
+          },
+        },
+      );
+      console.log(response);
+      console.log(getResponse.data);
+      console.log(response2flask);
+      alert("등록이 완료되었습니다.");
+      response.data.success = nav("/home");
 
       // 데이터 저장 후 응답 처리
       if (response.data.success) {
