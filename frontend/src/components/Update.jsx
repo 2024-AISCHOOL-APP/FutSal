@@ -72,25 +72,23 @@ const Update = () => {
     setPwError(false); // 비밀번호 일치 시 에러 상태 해제
 
     try {
-      const response = await axios.post(
-        "/user/handleUpdate",
-        {
-          userId,
-          userPw,
-          userNickname: localNickname,
-          userImg: localImg,
-          userAge: localAge,
-          userHeight: localHeight,
-          userWeight: localWeight,
-          userArea: localArea,
-          userEmail: localEmail,
+      const formData = new FormData();
+      formData.append("userId", userId);
+      formData.append("userPw", userPw);
+      formData.append("userNickname", localNickname);
+      formData.append("userImg", localImg);
+      formData.append("userAge", localAge);
+      formData.append("userHeight", localHeight);
+      formData.append("userWeight", localWeight);
+      formData.append("userArea", localArea);
+      formData.append("userEmail", localEmail);
+
+      const response = await axios.post("/user/handleUpdate", formData, {
+        headers: {
+          "x-session-id": sessionStorage.getItem("sessionId"),
+          "Content-Type": "multipart/form-data",
         },
-        {
-          headers: {
-            "x-session-id": sessionStorage.getItem("sessionId"),
-          },
-        }
-      );
+      });
       console.log(response);
       if (response.data.success) {
         setUserNickname(localNickname); // 글로벌 상태 업데이트
@@ -148,12 +146,10 @@ const Update = () => {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Profile Image URL</Form.Label>
+          <Form.Label>Profile Image</Form.Label>
           <Form.Control
-            type="text"
-            placeholder="Image URL"
-            value={localImg}
-            onChange={(e) => setLocalImg(e.target.value)}
+            type="file"
+            onChange={(e) => setLocalImg(e.target.files[0])}
           />
         </Form.Group>
 

@@ -15,7 +15,9 @@ router.post("/handleCreateTeam", (req, res) => {
   conn.query(sql, [userId, teamName, teamIcon, teamArea], (err) => {
     if (err) {
       console.error("Database error:", err);
-      return res.status(500).json({ success: false, message: "Database error occurred" });
+      return res
+        .status(500)
+        .json({ success: false, message: "Database error occurred" });
     }
     res.json({ success: true });
   });
@@ -24,16 +26,22 @@ router.post("/handleCreateTeam", (req, res) => {
 // 팀 정보 가져오기
 router.get("/teamInfo", (req, res) => {
   try {
+    const team_id = req.query.teamId;
+
     const sql = `
       SELECT * FROM teamInfo WHERE team_id = ?
     `;
-    conn.query(sql, [1], (err, results) => {
+    conn.query(sql, [team_id], (err, results) => {
       if (err) {
         console.error("Database error:", err);
-        return res.status(500).json({ success: false, message: "Database error occurred" });
+        return res
+          .status(500)
+          .json({ success: false, message: "Database error occurred" });
       }
       if (results.length === 0) {
-        return res.status(404).json({ success: false, message: "Team not found" });
+        return res
+          .status(404)
+          .json({ success: false, message: "Team not found" });
       }
       res.json({ success: true, data: results[0] });
     });
@@ -47,27 +55,38 @@ router.post("/teamJoin", (req, res) => {
   const { teamId, userId } = req.body;
 
   if (!teamId || !userId) {
-    return res.status(400).json({ success: false, message: "Team ID and User ID are required" });
+    return res
+      .status(400)
+      .json({ success: false, message: "Team ID and User ID are required" });
   }
 
   const checkSql = "SELECT * FROM joinInfo WHERE team_id = ? AND user_id = ?";
   conn.query(checkSql, [teamId, userId], (checkErr, checkResults) => {
     if (checkErr) {
       console.error("중복 확인 실패:", checkErr);
-      return res.status(500).json({ success: false, message: "데이터베이스 오류가 발생했습니다." });
+      return res
+        .status(500)
+        .json({ success: false, message: "데이터베이스 오류가 발생했습니다." });
     }
 
     if (checkResults.length > 0) {
-      return res.status(400).json({ success: false, message: "이미 가입 신청 하셨습니다." });
+      return res
+        .status(400)
+        .json({ success: false, message: "이미 가입 신청 하셨습니다." });
     }
 
-    const sql = "INSERT INTO joinInfo (team_id, user_id, join_date) VALUES (?, ?, NOW())";
+    const sql =
+      "INSERT INTO joinInfo (team_id, user_id, join_date) VALUES (?, ?, NOW())";
     conn.query(sql, [teamId, userId], (err) => {
       if (err) {
         console.error("팀 가입 실패:", err);
-        return res.status(500).json({ success: false, message: "서버 내부 오류가 발생했습니다." });
+        return res
+          .status(500)
+          .json({ success: false, message: "서버 내부 오류가 발생했습니다." });
       }
-      res.status(200).json({ success: true, message: "팀에 성공적으로 가입되었습니다." });
+      res
+        .status(200)
+        .json({ success: true, message: "팀에 성공적으로 가입되었습니다." });
     });
   });
 });
@@ -75,13 +94,17 @@ router.post("/teamJoin", (req, res) => {
 // 가입 신청 목록 가져오기
 router.get("/getApplys", (req, res) => {
   try {
-    const team_id = 1; // 팀 ID는 실제로는 동적으로 받아와야 합니다.
-    const sql = "SELECT * FROM joinInfo WHERE team_id = ? AND join_waiting = 'N'";
+    const team_id = req.query.teamId;
+
+    const sql =
+      "SELECT * FROM joinInfo WHERE team_id = ? AND join_waiting = 'N'";
 
     conn.query(sql, [team_id], (err, results) => {
       if (err) {
         console.error("Database error:", err);
-        return res.status(500).json({ success: false, message: "Database error occurred" });
+        return res
+          .status(500)
+          .json({ success: false, message: "Database error occurred" });
       }
       res.json({ success: true, posts: results });
     });
@@ -93,19 +116,26 @@ router.get("/getApplys", (req, res) => {
 // 가입 신청 수락
 router.post("/applyAccept", (req, res) => {
   const { user_id } = req.body;
-  const team_id = 1; // 팀 ID는 실제로는 동적으로 받아와야 합니다.
-  
+  const team_id = req.query.teamId;
+
   const updateSql = "UPDATE userInfo SET team_id = ? WHERE user_id = ?";
   conn.query(updateSql, [team_id, user_id], (err) => {
     if (err) {
       console.error("Database error:", err);
-      return res.status(500).json({ success: false, message: "Database error occurred" });
+      return res
+        .status(500)
+        .json({ success: false, message: "Database error occurred" });
     }
     const deleteSql = "DELETE FROM joinInfo WHERE team_id = ? AND user_id = ?";
     conn.query(deleteSql, [team_id, user_id], (err) => {
       if (err) {
         console.error("Database error during delete:", err);
-        return res.status(500).json({ success: false, message: "Database error occurred during delete" });
+        return res
+          .status(500)
+          .json({
+            success: false,
+            message: "Database error occurred during delete",
+          });
       }
       res.json({ success: true });
     });
@@ -115,13 +145,15 @@ router.post("/applyAccept", (req, res) => {
 // 가입 신청 거부
 router.post("/applyRefuse", (req, res) => {
   const { user_id } = req.body;
-  const team_id = 1; // 팀 ID는 실제로는 동적으로 받아와야 합니다.
-  
+  const team_id = req.query.teamId;
+
   const sql = "DELETE FROM joinInfo WHERE team_id = ? AND user_id = ?";
   conn.query(sql, [team_id, user_id], (err) => {
     if (err) {
       console.error("Database error:", err);
-      return res.status(500).json({ success: false, message: "Database error occurred" });
+      return res
+        .status(500)
+        .json({ success: false, message: "Database error occurred" });
     }
     res.json({ success: true });
   });
@@ -133,7 +165,9 @@ router.get("/teamlist", (req, res) => {
   const offset = (page - 1) * limit;
 
   const searchQuery = search ? "WHERE team_name LIKE ?" : "";
-  const queryParams = search ? [`%${search}%`, parseInt(limit), parseInt(offset)] : [parseInt(limit), parseInt(offset)];
+  const queryParams = search
+    ? [`%${search}%`, parseInt(limit), parseInt(offset)]
+    : [parseInt(limit), parseInt(offset)];
 
   const sql = `
     SELECT team_id AS id, team_name AS name, team_icon AS icon, team_area AS area, team_score AS score, team_img1 AS image_url, team_text AS description
@@ -177,7 +211,9 @@ router.get("/members", (req, res) => {
 
   if (!teamId) {
     console.log("teamId is required");
-    return res.status(400).json({ success: false, message: "teamId is required" });
+    return res
+      .status(400)
+      .json({ success: false, message: "teamId is required" });
   }
 
   try {
@@ -200,13 +236,17 @@ router.get("/members", (req, res) => {
     conn.query(sql, [teamId], (err, results) => {
       if (err) {
         console.error("Failed to fetch team members:", err);
-        return res.status(500).json({ success: false, message: "Failed to fetch team members" });
+        return res
+          .status(500)
+          .json({ success: false, message: "Failed to fetch team members" });
       }
       res.json({ success: true, data: results });
     });
   } catch (error) {
     console.error("Failed to fetch team members:", error);
-    res.status(500).json({ success: false, message: "Failed to fetch team members" });
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to fetch team members" });
   }
 });
 

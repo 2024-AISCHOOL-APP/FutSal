@@ -2,16 +2,16 @@ import React, { useState, useEffect } from "react";
 import Table from "react-bootstrap/Table";
 import axios from "../axios";
 import { Button } from "react-bootstrap";
-import '../css/teamapply.css'
+import "../css/teamapply.css";
 
-const TeamApply = () => {
+const TeamApply = ({ teamId }) => {
   const [teamApplys, setTeamApplys] = useState([]);
   const [update, setUpdate] = useState(false); // 상태 변경을 위한 상태 추가
 
   useEffect(() => {
     const fetchTeamApplys = async () => {
       try {
-        const response = await axios.get("/team/getApplys");
+        const response = await axios.get(`/team/getApplys?teamId=${teamId}`);
         const data = response.data;
         setTeamApplys(data.posts);
       } catch (error) {
@@ -24,7 +24,7 @@ const TeamApply = () => {
 
   const applyOk = async (userId) => {
     try {
-      const response = await axios.post("/team/applyAccept", {
+      const response = await axios.post(`/team/applyAccept?teamId=${teamId}`, {
         user_id: userId,
       });
       alert("팀원 가입 완료", response.data);
@@ -36,7 +36,7 @@ const TeamApply = () => {
 
   const applyNope = async (userId) => {
     try {
-      const response = await axios.post("/team/applyRefuse", {
+      const response = await axios.post(`/team/applyRefuse?teamId=${teamId}`, {
         user_id: userId,
       });
       alert("팀원 가입 거절 완료", response.data);
@@ -62,8 +62,18 @@ const TeamApply = () => {
               <td>{apply.user_id}</td>
               <td>{apply.join_date}</td>
               <td>
-                <Button className="ta-btn" onClick={() => applyOk(apply.user_id)}>허가</Button>
-                <Button className="ta-btn ta-btn-refusal" onClick={() => applyNope(apply.user_id)}>거절</Button>
+                <Button
+                  className="ta-btn"
+                  onClick={() => applyOk(apply.user_id)}
+                >
+                  허가
+                </Button>
+                <Button
+                  className="ta-btn ta-btn-refusal"
+                  onClick={() => applyNope(apply.user_id)}
+                >
+                  거절
+                </Button>
               </td>
             </tr>
           ))}

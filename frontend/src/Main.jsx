@@ -236,7 +236,7 @@ const Main = () => {
                   <Route path="/board" element={<Board />} />
                   <Route path="/posts/:id" element={<BoardDetail />} />
                   <Route path="/write" element={<Write />} />
-                  <Route path="/team" element={<Team />} />
+                  <Route path="//team/:teamId" element={<Team />} />
                   <Route path="/teamlist" element={<TeamList />} />
                   <Route path="/teamapply" element={<TeamApply />} />
                   <Route path="/mypage" element={<MyPage />}></Route>

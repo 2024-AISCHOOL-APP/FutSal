@@ -6,7 +6,7 @@ import { UserInfo } from "../UserInfo";
 import ModalComponent from "./TeamApplyModal";
 import TeamApply from "./TeamApply";
 import TeamMembers from "./TeamMembers";
-import '../css/team.css'
+import "../css/team.css";
 import { Button } from "react-bootstrap";
 
 const Team = () => {
@@ -146,7 +146,11 @@ const Team = () => {
           <div className="teamIconName">
             {/* <div className="teamIcon">팀 아이콘: {teamIcon}</div>  <- DB 받아오면 이거 쓰기 */}
             <div className="teamIcon">
-              <img src={process.env.PUBLIC_URL + '/profileIcon.png'} width="150px" alt="profile-icon" />
+              <img
+                src={process.env.PUBLIC_URL + "/profileIcon.png"}
+                width="150px"
+                alt="profile-icon"
+              />
             </div>
             <div className="teamName">
               <h3>{teamName}</h3>
@@ -157,14 +161,23 @@ const Team = () => {
             <div>◾️ 팀 지역: {teamArea}</div>
             <div>◾️ 팀 기록: {teamRecord}</div>
           </div>
-          <Button className="team-btn"
-            onClick={() => handleShowModal(<TeamMembers teamId={teamId} />, "xl")}>
+          <Button
+            className="team-btn"
+            onClick={() =>
+              handleShowModal(<TeamMembers teamId={teamId} />, "xl")
+            }
+          >
             팀원 목록
           </Button>
-          <Button className="team-btn" onClick={() => handleShowModal(<TeamApply />)}>
+          <Button
+            className="team-btn"
+            onClick={() => handleShowModal(<TeamApply teamId={teamId} />)}
+          >
             신청 목록
           </Button>
-          <Button className="team-btn" onClick={teamJoin}>가입 신청</Button>
+          <Button className="team-btn" onClick={teamJoin}>
+            가입 신청
+          </Button>
         </div>
 
         <div className="teamInfo mt-3">
@@ -182,12 +195,16 @@ const Team = () => {
           <div className="teamImages">
             {/* <img src={teamImg1} alt="팀 이미지 1" <- DB 받아오면 이거 쓰기 />
             <img src={teamImg2} alt="팀 이미지 2" /> */}
-            <img src={'/ggami.jpg'} alt="팀 이미지 1" />
-            <img src={'/myTeam.png'} alt="팀 이미지 2" />
+            <img src={"/ggami.jpg"} alt="팀 이미지 1" />
+            <img src={"/myTeam.png"} alt="팀 이미지 2" />
           </div>
           <div className="teamText">{teamText}</div>
         </div>
-        <ModalComponent show={showModal} handleClose={handleCloseModal} size={modalSize}>
+        <ModalComponent
+          show={showModal}
+          handleClose={handleCloseModal}
+          size={modalSize}
+        >
           {modalContent}
         </ModalComponent>
       </div>

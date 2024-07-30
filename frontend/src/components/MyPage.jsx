@@ -11,14 +11,18 @@ import {
   RadialLinearScale,
   PointElement,
   LineElement,
-  Filler
-} from 'chart.js';
+  Filler,
+} from "chart.js";
 import "../css/mypage.css";
 
-
 // Chart.js 구성 요소 등록
-ChartJS.register(RadarController, RadialLinearScale, LineElement, PointElement, Filler);
-
+ChartJS.register(
+  RadarController,
+  RadialLinearScale,
+  LineElement,
+  PointElement,
+  Filler
+);
 
 const MyPage = () => {
   const [currentPage, setCurrentPage] = useState("default");
@@ -116,15 +120,29 @@ const MyPage = () => {
   };
 
   const data = {
-    labels: ['Shooting', 'Passing', 'Dribbling', 'Speed', 'Defending', 'Goalkeeping'],
+    labels: [
+      "Shooting",
+      "Passing",
+      "Dribbling",
+      "Speed",
+      "Defending",
+      "Goalkeeping",
+    ],
     datasets: [
       {
-        label: 'User Stats',
-        data: [userShooting, userPassing, userDribbling, userSpeed, userDefending, userGoalkeeping],
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        borderColor: 'rgba(255, 99, 132, 1.5)'
-      }
-    ]
+        label: "User Stats",
+        data: [
+          userShooting,
+          userPassing,
+          userDribbling,
+          userSpeed,
+          userDefending,
+          userGoalkeeping,
+        ],
+        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        borderColor: "rgba(255, 99, 132, 1.5)",
+      },
+    ],
   };
 
   const options = {
@@ -151,8 +169,6 @@ const MyPage = () => {
     maintainAspectRatio: false,
     responsive: true,
   };
-
-
 
   return (
     <div id="mypage_container">
@@ -186,11 +202,10 @@ const MyPage = () => {
         <div id="mypage_container_left_down">
           <div id="mypage_container_left_down_box">
             <div id="mypage_container_left_down_hex">
-              <Radar data={data} options={options}/>
+              <Radar data={data} options={options} />
             </div>
           </div>
         </div>
-
       </div>
       <div id="mypage_container_right">
         {currentPage === "default" && (
