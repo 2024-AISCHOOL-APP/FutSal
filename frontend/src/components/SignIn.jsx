@@ -27,6 +27,8 @@ const SignIn = () => {
       if (response.data.success) {
         sessionStorage.setItem("sessionId", response.data.sessionId); // 세션 ID 저장
         sessionStorage.setItem("userId", userId); // 유저 ID 저장
+        const event = new Event("userChange");
+        window.dispatchEvent(event); // 이벤트 트리거
         nav("/"); // 홈 페이지로 이동
       } else {
         nav("/signin"); // 로그인 실패 시 다시 로그인 페이지로 이동
