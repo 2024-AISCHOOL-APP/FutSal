@@ -8,6 +8,7 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import axios from "../axios";
 import { useNavigate } from "react-router-dom";
+import '../css/teamlist.css'
 
 const TeamList = () => {
   const [teams, setTeams] = useState([]);
@@ -104,7 +105,7 @@ const TeamList = () => {
   }
 
   return (
-    <Container>
+    <Container className="tl-container">
       <Row className="my-4">
         <Col>
           <h1 className="text-center">Team List</h1>
@@ -121,8 +122,8 @@ const TeamList = () => {
           />
         </Col>
       </Row>
-      <Table striped bordered hover responsive>
-        <thead>
+      <Table className="b-table" striped bordered hover responsive>
+        <thead className="tl-thead">
           <tr>
             <th>팀 이름</th>
             <th>팀 아이콘</th>
@@ -175,9 +176,9 @@ const TeamList = () => {
         </tbody>
       </Table>
       <Row className="my-4">
-        <div className="pagination">
+        <div className="tl-pagination">
           <Button
-            className="pagination-buttons"
+            className="tl-pagination-buttons"
             variant="primary"
             onClick={handlePreviousPage}
             disabled={currentPage === 1}
@@ -188,7 +189,7 @@ const TeamList = () => {
             페이지 {currentPage} / {totalPages}
           </span>
           <Button
-            className="pagination-buttons"
+            className="tl-pagination-buttons"
             variant="primary"
             onClick={handleNextPage}
             disabled={currentPage === totalPages}

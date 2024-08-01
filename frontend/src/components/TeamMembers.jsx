@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Table, Container } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "../css/teamMembers.css";
 
 const TeamMembers = ({ teamId }) => {
   const [members, setMembers] = useState([]);
@@ -21,8 +24,9 @@ const TeamMembers = ({ teamId }) => {
     fetchTeamMembers();
   }, [teamId]);
   return (
-    <div>
-      <table>
+    <Container>
+      <h2 className="my-4">팀원 정보</h2>
+      <Table striped bordered hover>
         <thead>
           <tr>
             <th>회원 닉네임</th>
@@ -55,8 +59,8 @@ const TeamMembers = ({ teamId }) => {
             </tr>
           ))}
         </tbody>
-      </table>
-    </div>
+      </Table>
+    </Container>
   );
 };
 

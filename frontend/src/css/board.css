@@ -1,9 +1,37 @@
 /* Board.css */
 
-.t-container {
-  /* max-width: 1200px; */
-  margin: 0 auto;
+.board-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%; /* width를 100%로 설정 */
+  height: auto; /* height를 auto로 설정하여 내용에 맞게 조정 */
+  min-height: 100vh; /* 최소 높이를 100vh로 설정하여 화면을 꽉 채우도록 함 */
   padding: 20px;
+  box-sizing: border-box;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+}
+
+.board-title {
+  width: 80%; /* .board-container 길이의 80%로 설정 */
+  margin: 0 auto;
+}
+.button-group {
+  width: 80%; /* .board-container 길이의 80%로 설정 */
+  margin: 0 auto;
+  text-align: right;
+}
+
+.board-meta {
+  text-align: right;
+  width: 80%; /* .board-container 길이의 80%로 설정 */
+  margin: 0 auto;
+}
+
+.board-content {
+  width: 80%; /* .board-container 길이의 80%로 설정 */
+  margin: 0 auto;
 }
 
 .b-form-row {
@@ -47,10 +75,8 @@
 
 .b-table {
   margin-top: 20px;
-  border-collapse: separate;
-  /* 구분선을 제거하기 위해 변경 */
-  border-spacing: 0;
-  /* 셀 간격 제거 */
+  border-collapse: collapse; /* 테이블 셀 경계 제거 */
+  width: 100%;
 }
 
 .b-table thead {
@@ -157,7 +183,7 @@
   cursor: not-allowed;
 }
 
-.t-container thead {
+.board-container thead {
   --bs-table-bg: #effbef;
 }
 
@@ -167,8 +193,14 @@
 }
 /* 스트라이프 효과의 색상과 배경색을 투명으로 설정 */
 
-.b-table-bordered > :not(caption) > * > * {
+/* .b-table-bordered > :not(caption) > * > * {
   border-width: 0;
+} */
+
+tbody, td, tfoot, th,  tr {
+  border-color: white;
+  border-width: 0;
+  border-style: none;
 }
 /* 구분선 삭제 */
 
@@ -239,6 +271,15 @@
   justify-content: flex-end;
 }
 
+.btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #80E5A8;
+  --bs-btn-border-color: #80E5A8;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #66d09d;
+  --bs-btn-hover-border-color: #66d09d;
+}
+
 .b-board-detail-card .b-modal-title {
   font-weight: bold;
 }
@@ -295,4 +336,20 @@
   --bs-btn-hover-color: #fff;
   --bs-btn-hover-bg: #66d09d;
   --bs-btn-hover-border-color: #66d09d;
+}
+
+/* 추가된 미디어 쿼리 */
+@media (min-width: 1600px) {
+  .board-container {
+    max-width: 1500px;
+    background-color: white;
+  }
+}
+
+@media (min-width: 1400px) {
+  .board-container {
+    width: 1000px;
+    max-width: 1320px;
+    background-color: white;
+  }
 }

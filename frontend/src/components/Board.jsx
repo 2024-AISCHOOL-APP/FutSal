@@ -29,18 +29,10 @@ const formatDate = (dateString) => {
   return date.toLocaleString("ko-KR", options).replace(",", ""); // 한국어 로케일 사용
 };
 
-const Board = ({
-  type,
-  showFilters = true,
-  maxItems = 10,
-  showPagination = true,
-  showWriteButton = true,
-  showTypeAndDate = true,
-  tableClassName = "", // 추가된 부분
-}) => {
+const Board = () => {
   const [boardsId, setBoardsId] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
-  const [selectedType, setSelectedType] = useState(type || 0);
+  const [selectedType, setSelectedType] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [userId, setUserId] = useState(""); // 초기값 빈 문자열로 설정
@@ -48,7 +40,7 @@ const Board = ({
   const [searchQuery, setSearchQuery] = useState(""); // 검색어 상태
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const itemsPerPage = maxItems;
+  const itemsPerPage = 10;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -125,51 +117,49 @@ const Board = ({
   };
 
   return (
-    <div className="t-container">
-      {showFilters && (
-        <div className="b-form-row">
-          <Form.Group className="b-form-group">
-            <Form.Label className="b-form-label" style={{ width: "200px" }}>
-              게시글 타입
-            </Form.Label>
-            <Form.Control
-              as="select"
-              value={selectedType}
-              onChange={(e) => filterByType(Number(e.target.value))}
-            >
-              <option value={0}>모두 보기</option>
-              <option value={1}>공지게시판</option>
-              <option value={2}>자유게시판</option>
-              <option value={3}>용병게시판</option>
-            </Form.Control>
-          </Form.Group>
+    <div className="board-container">
+      <div className="b-form-row">
+        <Form.Group className="b-form-group">
+          <Form.Label className="b-form-label" style={{ width: "200px" }}>
+            게시글 타입
+          </Form.Label>
+          <Form.Control
+            as="select"
+            value={selectedType}
+            onChange={(e) => filterByType(Number(e.target.value))}
+          >
+            <option value={0}>모두 보기</option>
+            <option value={1}>공지게시판</option>
+            <option value={2}>자유게시판</option>
+            <option value={3}>용병게시판</option>
+          </Form.Control>
+        </Form.Group>
 
-          <Form.Group className="b-search-group">
-            <Form.Label className="b-form-label">검색</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="제목 또는 작성자로 검색"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </Form.Group>
-        </div>
-      )}
+        <Form.Group className="b-search-group">
+          <Form.Label className="b-form-label">검색</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="제목 또는 작성자로 검색"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </Form.Group>
+      </div>
 
       {/* 로딩 및 오류 처리 */}
       {loading && <p>로딩 중...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
 
-      <Table className={`b-table ${tableClassName}`} striped bordered hover>
+      <Table className="b-table" striped bordered hover>
         <thead>
           <tr>
-            {showTypeAndDate && <th>게시글 타입</th>}
+            <th>게시글 타입</th>
             <th className="b-wr">작성자</th>
             <th className="b-na">제목</th>
-            {showTypeAndDate && <th>작성일</th>}
+            <th>작성일</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="b-tbody">
           {filteredPosts.length > 0 ? (
             filteredPosts.map((post) => (
               <tr
@@ -177,17 +167,15 @@ const Board = ({
                 onClick={() => handleRowClick(post.board_id)}
                 style={{ cursor: "pointer" }}
               >
-                {showTypeAndDate && (
-                  <td>{getBoardTypeName(post.board_type)}</td>
-                )}
+                <td>{getBoardTypeName(post.board_type)}</td>
                 <td className="b-wr truncate">{post.user_id}</td>
                 <td className="b-na truncate">{post.board_title}</td>
-                {showTypeAndDate && <td>{formatDate(post.board_date)}</td>}
+                <td>{formatDate(post.board_date)}</td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan={showTypeAndDate ? 4 : 2} className="b-text-center">
+              <td colSpan={4} className="b-text-center">
                 게시글이 없습니다.
               </td>
             </tr>
@@ -195,35 +183,31 @@ const Board = ({
         </tbody>
       </Table>
 
-      {showPagination && (
-        <div className="b-pagination">
-          <Button
-            className="b-pagination-buttons"
-            variant="primary"
-            onClick={handlePreviousPage}
-            disabled={currentPage === 1}
-          >
-            이전
-          </Button>
-          <span className="b-pagination-info">
-            페이지 {currentPage} / {totalPages}
-          </span>
-          <Button
-            className="b-pagination-buttons"
-            variant="primary"
-            onClick={handleNextPage}
-            disabled={currentPage === totalPages}
-          >
-            다음
-          </Button>
-        </div>
-      )}
+      <div className="b-pagination">
+        <Button
+          className="b-pagination-buttons"
+          variant="primary"
+          onClick={handlePreviousPage}
+          disabled={currentPage === 1}
+        >
+          이전
+        </Button>
+        <span className="b-pagination-info">
+          페이지 {currentPage} / {totalPages}
+        </span>
+        <Button
+          className="b-pagination-buttons"
+          variant="primary"
+          onClick={handleNextPage}
+          disabled={currentPage === totalPages}
+        >
+          다음
+        </Button>
+      </div>
 
-      {showWriteButton && (
-        <div className="b-button-write">
-          <Link to="/write">글쓰기</Link>
-        </div>
-      )}
+      <div className="b-button-write">
+        <Link to="/write">글쓰기</Link>
+      </div>
     </div>
   );
 };

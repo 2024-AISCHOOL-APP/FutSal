@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Header from "./components/Header";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { UserInfo } from "./UserInfo";
@@ -48,6 +47,7 @@ const Main = () => {
   const [userGoalkeeping, setUserGoalkeeping] = useState(null);
   const [userEmail, setUserEmail] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userScore, setUserScore] = useState(null);
 
   // TeamInfo
   const [teamName, setTeamName] = useState(null);
@@ -132,6 +132,8 @@ const Main = () => {
         setUserEmail,
         isLoggedIn,
         setIsLoggedIn,
+        userScore,
+        setUserScore,
       }}
     >
       <TeamInfo.Provider
@@ -226,7 +228,6 @@ const Main = () => {
                   setBoardLikeCount,
                 }}
               >
-                <Header />
                 <NavMenu />
                 <Routes>
                   <Route path="/" element={<Home />} />
@@ -236,12 +237,12 @@ const Main = () => {
                   <Route path="/board" element={<Board />} />
                   <Route path="/posts/:id" element={<BoardDetail />} />
                   <Route path="/write" element={<Write />} />
-                  <Route path="//team/:teamId" element={<Team />} />
+                  <Route path="/team/:teamId" element={<Team />} />
                   <Route path="/teamlist" element={<TeamList />} />
                   <Route path="/teamapply" element={<TeamApply />} />
                   <Route path="/mypage" element={<MyPage />}></Route>
                   <Route path="/comment/:boardId" element={<Comment />} />
-                  <Route path="/winrate" element={<WinRate />}></Route>
+                  <Route path="/winrate/:teamId" element={<WinRate />}></Route>
                   <Route path="/evaluation" element={<Evaluation />}></Route>
                   <Route path="/home" element={<Home />}></Route>
                   <Route path="/map" element={<KakaoMap />}></Route>

@@ -229,7 +229,8 @@ router.get("/members", (req, res) => {
         user_dribbling,
         user_speed,
         user_defending,
-        user_goalkeeping
+        user_goalkeeping,
+        user_score
       FROM userInfo
       WHERE team_id = ?
     `;

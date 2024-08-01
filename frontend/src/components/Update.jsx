@@ -136,7 +136,7 @@ const Update = () => {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Nickname</Form.Label>
+          <Form.Label>닉네임</Form.Label>
           <Form.Control
             type="text"
             placeholder="Nickname"
@@ -146,7 +146,7 @@ const Update = () => {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Profile Image</Form.Label>
+          <Form.Label>프로필 사진</Form.Label>
           <Form.Control
             type="file"
             onChange={(e) => setLocalImg(e.target.files[0])}
@@ -154,7 +154,7 @@ const Update = () => {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Age</Form.Label>
+          <Form.Label>나이</Form.Label>
           <Form.Control
             type="number"
             placeholder="Age"
@@ -164,7 +164,7 @@ const Update = () => {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Height</Form.Label>
+          <Form.Label>키</Form.Label>
           <Form.Control
             type="number"
             placeholder="Height"
@@ -174,7 +174,7 @@ const Update = () => {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Weight</Form.Label>
+          <Form.Label>몸무게</Form.Label>
           <Form.Control
             type="number"
             placeholder="Weight"
@@ -184,7 +184,7 @@ const Update = () => {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Area</Form.Label>
+          <Form.Label>지역</Form.Label>
           <Form.Control
             type="text"
             placeholder="Area"
@@ -194,7 +194,7 @@ const Update = () => {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Email</Form.Label>
+          <Form.Label>이메일</Form.Label>
           <Form.Control
             type="email"
             placeholder="Email"

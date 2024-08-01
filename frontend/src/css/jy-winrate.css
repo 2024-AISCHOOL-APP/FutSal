@@ -1,0 +1,95 @@
+/* WinRate.css */
+
+.team-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.win-rate h1 {
+    font-size: 2.5rem;
+    color: #ff0000;
+    /* 강조를 위해 색상 변경 */
+}
+
+/* .team-icon img {
+    border-radius: 50%;
+    border: 2px solid #ccc;
+} */
+
+.stats .stat {
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+}
+
+.stats .bar-container {
+    flex-grow: 1;
+    height: 20px;
+    background-color: #e9ecef;
+    margin-left: 10px;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.stats .bar {
+    height: 100%;
+    background-color: hsl(195, 100%, 50%);
+    /* 그래프 색상 */
+}
+
+.divider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.vertical-divider {
+    width: 1px;
+    height: 100%;
+    background-color: #000;
+}
+
+.stats.reverse .stat {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+}
+
+.stats.reverse .bar-container {
+    margin-right: 10px;
+    margin-left: 0;
+    transform: scaleX(-1); /* 그래프 좌우반전 */
+    margin-bottom: 10px;
+}
+
+.stats.reverse .bar {
+    background-color: hsl(195, 100%, 50%);
+    /* 그래프 색상 */
+}
+
+.wr-left-percentage {
+    position: absolute;
+    right: 0;
+    transform: translateX(0%); /* 그래프 오른쪽 끝에 위치 */
+    padding-left: 5px; /* 텍스트와 그래프 사이 간격 */
+}
+
+.wr-right-percentage {
+    /* position: absolute; */
+    left: 0;
+    transform: translateX(-100%);
+    padding-right: 5px;
+    display: flex;
+    transform: scaleX(-1);
+}
+
+
+
+
+
+/* @media (min-width: 768px) {
+    .col-md-1 {
+        flex: 0 0 auto;
+        width: 8.33333333%;
+    }
+} */

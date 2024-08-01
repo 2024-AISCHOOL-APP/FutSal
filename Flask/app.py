@@ -25,10 +25,10 @@ CORS(app)
 
 
 db = MySQLdb.connect(host='project-db-stu3.smhrd.com',
-                     user = 'Insa5_App_hacksim_2',
-                     passwd = 'aischool2',
-                     db='Insa5_App_hacksim_2',
-                     port=3307)
+                    user = 'Insa5_App_hacksim_2',
+                    passwd = 'aischool2',
+                    db='Insa5_App_hacksim_2',
+                    port=3307)
 
 cursor = db.cursor()
 
@@ -56,8 +56,8 @@ def Attacker():
     missing_fields = [field for field in required_fields if field not in data]
 
     if missing_fields:
-        return jsonify({'error': f'Missing required fields : {",".join(missing_fields)}'}), 400
-    
+        return jsonify({'error': f"Missing required fields : {','.join(missing_fields)}"}), 400
+
     try:
         input_data = [data[field] for field in required_fields]
         input_data = np.array(input_data).reshape(1,-1)
@@ -107,7 +107,6 @@ def Defender():
 
     if missing_fields:
         return jsonify({'error': f'Missing required fields : {",".join(missing_fields)}'}), 400
-    
     
     try:
         input_data = [float(data[field]) for field in required_fields]

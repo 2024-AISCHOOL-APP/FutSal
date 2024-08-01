@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { TeamInfo } from "../TeamInfo";
 import axios from "../axios";
-import { UserInfo } from "../UserInfo";
 import ModalComponent from "./TeamApplyModal";
 import TeamApply from "./TeamApply";
 import TeamMembers from "./TeamMembers";
@@ -53,34 +52,12 @@ const Team = () => {
     setTeamImg2,
     teamText,
     setTeamText,
-    userNickname,
-    setUserNickname,
-    userImg,
-    setUserImg,
-    userShooting,
-    setUserShooting,
-    userPassing,
-    setUserPassing,
-    userDribbling,
-    setUserDribbling,
-    userSpeed,
-    setUserSpeed,
-    userDefending,
-    setUserDefending,
-    userGoalkeeping,
-    setUserGoalkeeping,
-    userScore,
-    setUserScore,
   } = useContext(TeamInfo, UserInfo);
 
   const [userId, setUserId] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState(null);
   const [modalSize, setModalSize] = useState("lg");
-  
-const [userDataArray, setUserDataArray] = useState([]);
-
-const [joinRequestStatus, setJoinRequestStatus] = useState(null); // 팀원 가입 신청 상태 변수
 
   useEffect(() => {
     const fetchSessionData = async () => {
@@ -125,6 +102,19 @@ const [joinRequestStatus, setJoinRequestStatus] = useState(null); // 팀원 가�
           setTeamText(teamData.team_text);
     
           console.log("Updated teamId:", teamData.team_id);
+
+          // 모든 팀원 데이터 가져오기
+          const membersResponse = await axios.get("/team/members", {
+            headers: {
+              "x-session-id": sessionStorage.getItem("sessionId"),
+            },
+            params: {
+              teamId: teamId,
+            },
+          });
+          console.log("Members response:", membersResponse.data);
+          setMembers(membersResponse.data.members || []); // members가 undefined인 경우 빈 배열로 설정
+
         } else {
           console.error("Failed to fetch team data:", response.data.message);
         }
@@ -139,17 +129,7 @@ const [joinRequestStatus, setJoinRequestStatus] = useState(null); // 팀원 가�
     };
 
     initialize();
-  }, [
-    setTeamId,
-    setTeamName,
-    setTeamIcon,
-    setTeamScore,
-    setTeamRecord,
-    setTeamArea,
-    setTeamImg1,
-    setTeamImg2,
-    setTeamText,
-  ]);
+  }, [teamId]);
 
   const teamJoin = async () => {
     try {
@@ -178,58 +158,14 @@ const [joinRequestStatus, setJoinRequestStatus] = useState(null); // 팀원 가�
       alert("이미 가입 신청 하셨습니다.");
     }
   };
+
   const handleShowModal = (content, size = "lg") => {
     setModalContent(content);
     setModalSize(size);
     setShowModal(true);
   };
+
   const handleCloseModal = () => setShowModal(false);
-
-  const data = {
-    labels: ['Score'],
-    datasets: [
-      {
-        label: 'Team Score',
-        data: [teamScore || 0], // DB에서 가져온 teamScore 값을 사용합니다.
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 1,
-      },
-    ],
-  };
-  
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: true,
-      },
-      tooltip: {
-        callbacks: {
-          label: (tooltipItem) => `Score: ${tooltipItem.raw}`,
-        },
-      },
-    },
-    scales: {
-      x: {
-        beginAtZero: true,
-        title: {
-          display: true,
-        },
-      },
-      y: {
-        beginAtZero: true,
-        title: {
-          display: true,
-          text: 'Score',
-        },
-      },
-    },
-  };
-
-
-
 
   const handleGoToWinRate = () => {
     navigate(`/winrate/${teamId}`); // 승률 페이지로 이동
@@ -282,7 +218,6 @@ const [joinRequestStatus, setJoinRequestStatus] = useState(null); // 팀원 가�
     teamM();
 
 },[navigate,joinRequestStatus]);
-
   return (
     <div className="container contai">
       <div className="leftSection">
@@ -322,43 +257,35 @@ const [joinRequestStatus, setJoinRequestStatus] = useState(null); // 팀원 가�
           <Button className="team-btn" onClick={teamJoin}>
             가입 신청
           </Button>
-
-          <Button  // 승률 페이지로 이동하는 버튼
-            className="team-btn"
-            onClick={handleGoToWinRate}>
-            승률 비교
-          </Button>
-          
         </div>
 
         <div className="teamInfo mt-3">
           <h2>팀 점수</h2>
           <div>{teamScore}</div>
-          <div style={{ height: '200px' }}> {/* 차트의 높이를 설정합니다. */}
-            <Bar data={data} options={options} />
+          <div>
+            요기는 차트 구현-팀 가입은 스탯 안적어도 가입되게 하고 스탯창 적용은
+            마이페이지에서 셋팅해야 적용되게 적용
           </div>
         </div>
       </div>
 
-      <div className="rightSection">
-        <div className="teamImagesAndText">
-          <div className="teamImages">
-            {/* <img src={teamImg1} alt="팀 이미지 1" <- DB 받아오면 이거 쓰기 />
-            <img src={teamImg2} alt="팀 이미지 2" /> */}
-            <img src={"/ggami.jpg"} alt="팀 이미지 1" />
-            <img src={"/myTeam.png"} alt="팀 이미지 2" />
+        <div className="rightSection">
+          <div className="teamImagesAndText">
+            <div className="teamImages">
+              <img src={"/ggami.jpg"} alt="팀 이미지 1" />
+              <img src={"/myTeam.png"} alt="팀 이미지 2" />
+            </div>
+            <div className="teamText">{teamText}</div>
           </div>
-          <div className="teamText">{teamText}</div>
+          <ModalComponent
+            show={showModal}
+            handleClose={handleCloseModal}
+            size={modalSize}
+          >
+            {modalContent}
+          </ModalComponent>
         </div>
-        <ModalComponent
-          show={showModal}
-          handleClose={handleCloseModal}
-          size={modalSize}
-        >
-          {modalContent}
-        </ModalComponent>
       </div>
-    </div>
   );
 };
 

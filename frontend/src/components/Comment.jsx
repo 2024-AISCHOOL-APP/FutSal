@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "../axios"; // axios 인스턴스 설정
-import { Form, Button, Card, Spinner, CardHeader } from "react-bootstrap";
-import '../css/comment.css';
+import { Form, Button, Card, Spinner } from "react-bootstrap";
+import "../css/comment.css";
 
 const Comment = ({ boardId }) => {
   const [comments, setComments] = useState([]);
@@ -52,6 +52,7 @@ const Comment = ({ boardId }) => {
         comment_id: response.data.comment_id,
         user_id: userId,
         comment_content: newComment,
+        comment_date: new Date().toISOString(), // Assuming the backend doesn't return the comment_date
       };
 
       setComments([...comments, newCommentWithId]);
@@ -71,12 +72,15 @@ const Comment = ({ boardId }) => {
       <div className="comment-list">
         {comments.map((comment) => (
           <Card key={comment.comment_id} className="mb-3 commentBox">
-            <CardHeader>댓글</CardHeader>
-            <Card.Body>
+            <Card.Body className="comment-text">
               <Card.Title className="mb-1"></Card.Title>
               <Card.Text>{comment.comment_content}</Card.Text>
-              <Card.Text>작성자 : {comment.user_id}</Card.Text>
-              <Card.Text>작성일 : {formatDate(comment.comment_date)}</Card.Text>
+              <Card.Text className="text-right">
+                작성자: {comment.user_id}
+              </Card.Text>
+              <Card.Text className="text-right">
+                작성일: {formatDate(comment.comment_date)}
+              </Card.Text>
             </Card.Body>
           </Card>
         ))}

@@ -148,7 +148,8 @@ const SelfStats = () => {
 
           // Flask 서버에 데이터 전송
           const response2flask = await axios.post(
-            `http://localhost:5000/${userPosition}`,    
+            `http://localhost:5000/${userPosition}`,
+          
             {
               userAge: datafromData.user_age,
               userHeight: datafromData.user_height,

@@ -38,7 +38,7 @@ app.use("/user", userRouter);
 app.use("/board", boardRoutes);
 app.use("/team", teamRouter);
 app.use("/coment", commentRouter);
-//app.use("/winrate", winrateRouter)
+app.use("/winrate", winrateRouter)
 app.use('/evaluation', evaluationRouter);
 app.use("/selfstats", selfstatsRouter); 
 
