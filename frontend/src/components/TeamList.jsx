@@ -128,7 +128,6 @@ const TeamList = () => {
             <th>팀 아이콘</th>
             <th>팀 지역</th>
             <th>팀 점수</th>
-            <th>팀 이미지 및 설명</th>
           </tr>
         </thead>
         <tbody>
@@ -149,20 +148,6 @@ const TeamList = () => {
                 </td>
                 <td>{team.area}</td>
                 <td>{team.score}</td>
-                <td>
-                  <div className="d-flex align-items-center">
-                    <img
-                      src={team.image_url}
-                      alt={team.name}
-                      style={{
-                        width: "50px",
-                        height: "50px",
-                        marginRight: "10px",
-                      }}
-                    />
-                    <p className="mb-0">{team.description}</p>
-                  </div>
-                </td>
               </tr>
             ))
           ) : (

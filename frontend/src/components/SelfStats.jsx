@@ -23,6 +23,8 @@ const SelfStats = () => {
     setUserDefending,
     userGoalkeeping,
     setUserGoalkeeping,
+    userScore,
+    setUserScore,
     userAge,
     setUserAge,
     userHeight,
@@ -37,7 +39,7 @@ const SelfStats = () => {
   const [selectedSpeed, setSelectedSpeed] = useState(userSpeed);
   const [selectedDefending, setSelectedDefending] = useState(userDefending);
   const [selectedGoalkeeping, setSelectedGoalkeeping] = useState(userGoalkeeping);
-  const [selectedPosition, setSelectedPosition] = useState(userPosition || ""); // 빈 문자열로 초기화
+  const [selectedPosition, setSelectedPosition] = useState(userPosition || ""); 
 
   const nav = useNavigate();
 
@@ -74,21 +76,27 @@ const SelfStats = () => {
     switch (stat) {
       case 'Shooting':
         setSelectedShooting(value);
+        setUserShooting(value);
         break;
       case 'Passing':
         setSelectedPassing(value);
+        setUserPassing(value);
         break;
       case 'Dribbling':
         setSelectedDribbling(value);
+        setUserDribbling(value);
         break;
       case 'Speed':
         setSelectedSpeed(value);
+        setUserSpeed(value);
         break;
       case 'Defending':
         setSelectedDefending(value);
+        setUserDefending(value);
         break;
       case 'Goalkeeping':
         setSelectedGoalkeeping(value);
+        setUserGoalkeeping(value);
         break;
       default:
         break;
@@ -119,78 +127,65 @@ const SelfStats = () => {
           },
         }
       );
-      const getResponse = await axios.post('/user/data',{
-        userId: userId,
-      },{
-        headers: {
-          "x-session-id": sessionStorage.getItem("sessionId"),
 
-        },
-      });
-      if (getResponse.data.success) {
-        const datafromData = getResponse.data.data;
-        console.log("User data success:", datafromData);
-        setUserAge(datafromData.user_age);
-        setUserHeight(datafromData.user_height);
-        setUserWeight(datafromData.user_weight);
-        console.log("Updated userId:", datafromData.user_id);
-      } else {
-        console.error("Failed to fetch team data:", getResponse.data.message);
-      }
-
-      const response2flask = await axios.post(
-        `http://localhost:5000/predict_at`,    
-
-        {
-
-          userAge: userAge,
-          userHeight: userHeight,
-          userWeight: userWeight,
-          userPosition: userPosition,
-          userShooting: userShooting,
-          userPassing: userPassing,
-          userDribbling: userDribbling,
-          userSpeed: userSpeed,
-          userDefending: userDefending,
-          userGoalkeeping: userGoalkeeping,
+      if (response.data.success) {
+        // SelfStats 저장 성공 후 사용자 데이터 갱신
+        const getResponse = await axios.post('/user/data',{
           userId: userId,
-        },
-        {
+        },{
           headers: {
             "x-session-id": sessionStorage.getItem("sessionId"),
           },
-        },
-      );
-      console.log(response);
-      console.log(getResponse.data);
-      console.log(response2flask);
-      alert("등록이 완료되었습니다.");
-      response.data.success = nav("/home");
+        });
 
-      // 데이터 저장 후 응답 처리
-      if (response.data.success) {
-        // 성공적으로 저장되었을 때의 로직
-        console.log("Data successfully saved");
-        alert("등록이 완료되었습니다.");
+        if (getResponse.data.success) {
+          const datafromData = getResponse.data.data;
+          console.log("User data success:", datafromData);
+          setUserAge(datafromData.user_age);
+          setUserHeight(datafromData.user_height);
+          setUserWeight(datafromData.user_weight);
+          console.log("Updated userId:", datafromData.user_id);
 
-        // 상태 업데이트
-        setUserShooting(selectedShooting);
-        setUserPassing(selectedPassing);
-        setUserDribbling(selectedDribbling);
-        setUserSpeed(selectedSpeed);
-        setUserDefending(selectedDefending);
-        setUserGoalkeeping(selectedGoalkeeping);
-        setUserPosition(selectedPosition);
+          // Flask 서버에 데이터 전송
+          const response2flask = await axios.post(
+            `http://localhost:5000/predict_at`,    
+            {
+              userAge: datafromData.user_age,
+              userHeight: datafromData.user_height,
+              userWeight: datafromData.user_weight,
+              userPosition: userPosition,
+              userShooting: userShooting,
+              userPassing: userPassing,
+              userDribbling: userDribbling,
+              userSpeed: userSpeed,
+              userDefending: userDefending,
+              userGoalkeeping: userGoalkeeping,
+              userId: userId,
+            },
+            {
+              headers: {
+                "x-session-id": sessionStorage.getItem("sessionId"),
+              },
+            },
+          );
 
-        // 성공 후 마이페이지로 리다이렉트
-        nav("/mypage");
+          if (response2flask.status === 200) {
+            alert("등록이 완료되었습니다.");
+            nav("/mypage");
+          } else {
+            console.error("Failed to get prediction from Flask server:", response2flask.data.message);
+            alert("데이터 저장에 실패했습니다.");
+          }
+        } else {
+          console.error("Failed to fetch user data:", getResponse.data.message);
+          alert("데이터 저장에 실패했습니다.");
+        }
       } else {
-        // 저장 실패 시
         console.error("Failed to save data:", response.data.message);
         alert("데이터 저장에 실패했습니다.");
       }
     } catch (error) {
-      console.log(error);
+      console.error("서버와의 통신 중 오류가 발생했습니다.", error);
       alert("서버와의 통신 중 오류가 발생했습니다.");
     }
   };

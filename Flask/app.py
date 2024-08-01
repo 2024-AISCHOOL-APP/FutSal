@@ -24,10 +24,10 @@ CORS(app, resources={r"/*":{"origins":"http://localhost:3000"}})
 
 
 db = MySQLdb.connect(host='project-db-stu3.smhrd.com',
-                     user = 'Insa5_App_hacksim_2',
-                     passwd = 'aischool2',
-                     db='Insa5_App_hacksim_2',
-                     port=3307)
+                    user = 'Insa5_App_hacksim_2',
+                    passwd = 'aischool2',
+                    db='Insa5_App_hacksim_2',
+                    port=3307)
 
 cursor = db.cursor()
 
@@ -55,7 +55,7 @@ def predict_at():
     missing_fields = [field for field in required_fields if field not in data]
 
     if missing_fields:
-        return jsonify({'error': f'Missing required fields : {','.join(missing_fields)}'}), 400
+        return jsonify({'error': f"Missing required fields : {','.join(missing_fields)}"}), 400
     
     try:
         input_data = [data[field] for field in required_fields]
@@ -105,7 +105,7 @@ def predict_df():
     missing_fields = [field for field in required_fields if field not in data]
 
     if missing_fields:
-        return jsonify({'error': f'Missing required fields : {','.join(missing_fields)}'}), 400
+        return jsonify({'error': f"Missing required fields : {','.join(missing_fields)}"}), 400
     
     try:
         input_data = [float(data[field]) for field in required_fields]

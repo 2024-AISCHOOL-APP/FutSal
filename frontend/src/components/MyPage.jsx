@@ -49,6 +49,8 @@ const MyPage = () => {
     setUserDefending,
     userGoalkeeping,
     setUserGoalkeeping,
+    userScore,
+    setUserScore
   } = useContext(UserInfo);
 
   const [teamName, setTeamName] = useState(null);
@@ -61,7 +63,7 @@ const MyPage = () => {
             "x-session-id": sessionStorage.getItem("sessionId"),
           },
         });
-        console.log(userId);
+
         setUserId(response.data.userId);
         sessionStorage.setItem("userId", response.data.userId); // 세션에 userId 저장
       } catch (error) {
@@ -96,6 +98,7 @@ const MyPage = () => {
           setUserDefending(userData.user_defending);
           setUserGoalkeeping(userData.user_goalkeeping);
           setTeamName(userData.team_name);
+          setUserScore(userData.user_score);
         } else {
           console.error("Failed to fetch user data:", response.data.message);
         }
@@ -161,7 +164,7 @@ const MyPage = () => {
         suggestedMax: 100,
       },
     },
-    plugins: {
+    plugins: { 
       legend: {
         display: false, // 범례 숨김
       },
@@ -201,6 +204,7 @@ const MyPage = () => {
 
         <div id="mypage_container_left_down">
           <div id="mypage_container_left_down_box">
+              <p>User Score: {userScore}</p>
             <div id="mypage_container_left_down_hex">
               <Radar data={data} options={options} />
             </div>

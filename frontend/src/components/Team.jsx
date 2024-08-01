@@ -1,16 +1,37 @@
 import React, { useContext, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { TeamInfo } from "../TeamInfo";
 import axios from "../axios";
-import { UserInfo } from "../UserInfo";
 import ModalComponent from "./TeamApplyModal";
 import TeamApply from "./TeamApply";
 import TeamMembers from "./TeamMembers";
 import "../css/team.css";
 import { Button } from "react-bootstrap";
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js';
+import "../css/mypage.css";
+
+// Chart.js 구성 요소 등록
+ChartJS.register(
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const Team = () => {
   const { teamId } = useParams(); // URL 파라미터에서 teamId를 가져옴
+  const navigate = useNavigate(); // useNavigate 훅 추가
 
   const {
     setTeamId,
@@ -31,12 +52,13 @@ const Team = () => {
     setTeamImg2,
     teamText,
     setTeamText,
-  } = useContext(TeamInfo, UserInfo);
+  } = useContext(TeamInfo);
 
   const [userId, setUserId] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState(null);
   const [modalSize, setModalSize] = useState("lg");
+  const [members, setMembers] = useState([]);
 
   useEffect(() => {
     const fetchSessionData = async () => {
@@ -59,9 +81,9 @@ const Team = () => {
         const response = await axios.get("/team/teamInfo", {
           headers: {
             "x-session-id": sessionStorage.getItem("sessionId"),
-            params: {
-              teamId: teamId,
-            },
+          },
+          params: {
+            teamId: teamId,
           },
         });
         console.log("Team data:", response.data);
@@ -81,6 +103,19 @@ const Team = () => {
           setTeamText(teamData.team_text);
 
           console.log("Updated teamId:", teamData.team_id);
+
+          // 모든 팀원 데이터 가져오기
+          const membersResponse = await axios.get("/team/members", {
+            headers: {
+              "x-session-id": sessionStorage.getItem("sessionId"),
+            },
+            params: {
+              teamId: teamId,
+            },
+          });
+          console.log("Members response:", membersResponse.data);
+          setMembers(membersResponse.data.members || []); // members가 undefined인 경우 빈 배열로 설정
+
         } else {
           console.error("Failed to fetch team data:", response.data.message);
         }
@@ -95,17 +130,7 @@ const Team = () => {
     };
 
     initialize();
-  }, [
-    setTeamId,
-    setTeamName,
-    setTeamIcon,
-    setTeamScore,
-    setTeamRecord,
-    setTeamArea,
-    setTeamImg1,
-    setTeamImg2,
-    setTeamText,
-  ]);
+  }, [teamId]);
 
   const teamJoin = async () => {
     try {
@@ -133,18 +158,70 @@ const Team = () => {
       alert("이미 가입 신청 하셨습니다.");
     }
   };
+
   const handleShowModal = (content, size = "lg") => {
     setModalContent(content);
     setModalSize(size);
     setShowModal(true);
   };
+
   const handleCloseModal = () => setShowModal(false);
+
+  const data = {
+    labels: ['Team Score', ...members.map(member => member.user_nickName)], // team_score와 team member nickname
+    datasets: [
+      {
+        label: 'Score',
+        data: [teamScore, ...members.map(member => member.user_score || 0)], // team_score와 user_score
+        backgroundColor: ['rgba(75, 192, 192, 0.2)', ...members.map(() => 'rgba(153, 102, 255, 0.2)')],
+        borderColor: ['rgba(75, 192, 192, 1)', ...members.map(() => 'rgba(153, 102, 255, 1)')],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+      },
+      tooltip: {
+        callbacks: {
+          label: (tooltipItem) => `${tooltipItem.raw}`,
+        },
+      },
+    },
+    scales: {
+      x: {
+        beginAtZero: true,
+        title: {
+          display: true,
+        },
+      },
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+        },
+        ticks: {
+          max: 10,
+          min: 0,
+        },
+      },
+    },
+  };
+
+  const handleGoToWinRate = () => {
+    navigate(`/winrate/${teamId}`); // 승률 페이지로 이동
+  };
+
   return (
     <div className="container contai">
       <div className="leftSection">
         <div className="teamInfo">
           <div className="teamIconName">
-            {/* <div className="teamIcon">팀 아이콘: {teamIcon}</div>  <- DB 받아오면 이거 쓰기 */}
             <div className="teamIcon">
               <img
                 src={process.env.PUBLIC_URL + "/profileIcon.png"}
@@ -181,20 +258,23 @@ const Team = () => {
         </div>
 
         <div className="teamInfo mt-3">
-          <h2>팀 점수</h2>
-          <div>{teamScore}</div>
-          <div>
-            요기는 차트 구현-팀 가입은 스탯 안적어도 가입되게 하고 스탯창 적용은
-            마이페이지에서 셋팅해야 적용되게 적용
+          <div style={{ height: '150px' }}> {/* 차트의 높이를 설정합니다. */}
+            <Bar data={data} options={options} />
           </div>
+          <h3>Team Score : {teamScore}</h3>
+
+          <Button  // 승률 페이지로 이동하는 버튼
+            className="team-btn"
+            onClick={handleGoToWinRate}>
+            승률 비교
+          </Button>
+
         </div>
       </div>
 
       <div className="rightSection">
         <div className="teamImagesAndText">
           <div className="teamImages">
-            {/* <img src={teamImg1} alt="팀 이미지 1" <- DB 받아오면 이거 쓰기 />
-            <img src={teamImg2} alt="팀 이미지 2" /> */}
             <img src={"/ggami.jpg"} alt="팀 이미지 1" />
             <img src={"/myTeam.png"} alt="팀 이미지 2" />
           </div>
