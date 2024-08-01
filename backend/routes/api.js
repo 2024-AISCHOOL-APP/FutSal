@@ -13,14 +13,27 @@ router.post("/login", (req, res) => {
   }
 });
 
+
 router.get("/get-session", (req, res) => {
   const sessionId = req.headers["x-session-id"];
-  if (sessionId && sessionStore[sessionId]) {
-    res.json({ userId: sessionStore[sessionId].user.user_id });
-  } else {
-    res.status(401).json({ error: "Not authenticated" });
+  
+  if (!sessionId) {
+    return res.status(400).json({ error: "Session ID is missing" });
   }
-});
+
+  sessionStore.get(sessionId, (err, session) => {
+    if (err || !session) {
+      console.error('Session error:', err);
+      return res.status(500).json({ success: false, message: 'Session error occurred' });
+    }
+
+    if (session.user && session.user.user_id) {
+      res.json({ userId: session.user.user_id });
+    } else {
+      res.status(401).json({ error: "Not authenticated" });
+    }
+  });
+}); 
 
 router.post("/logout", (req, res) => {
   const sessionId = req.headers["x-session-id"];

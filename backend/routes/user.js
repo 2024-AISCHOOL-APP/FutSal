@@ -81,8 +81,14 @@ router.post("/handleSignIn", async (req, res) => {
       if (match) {
         console.log("로그인 성공");
         const sessionId = new Date().getTime().toString(); // 간단한 세션 ID 생성
-        sessionStore[sessionId] = { user: rows[0] };
-        res.json({ success: true, sessionId });
+        sessionStore.set(sessionId, { user: rows[0] }, (err) => {
+          if (err) {
+            console.error("세션 저장 오류:", err);
+            return res.status(500).json({ success: false, message: "Failed to save session" });
+          }
+          console.log("세션 저장:", { user: rows[0] }); // 세션 저장 로그
+          res.json({ success: true, sessionId });
+        });
       } else {
         console.log("로그인 실패: 비밀번호 불일치");
         res.json({ success: false, message: "Invalid credentials" });
@@ -398,4 +404,36 @@ router.post("/goUserTeam", (req, res) => {
     res.json({ success: true, teamId: results[0].team_Id });
   });
 });
+router.post("/teamM",(req,res)=>{
+  console.log('Request received at /teamM');
+  const { teamId } = req.body; 
+  const sql = `SELECT
+    user_age,
+    user_height,
+    user_weight,
+    user_shooting,
+    user_passing,
+    user_dribbling,
+    user_speed,
+    user_defending,
+    user_goalkeeping,
+    user_position,
+    team_id
+FROM
+    userInfo
+WHERE
+    team_id = ?
+ORDER BY
+    user_score DESC;
+`
+conn.query(sql,[teamId],(err,results)=>{
+  if (err) {
+    console.error('Database query error:', err);
+    return res.status(500).json({ success: false, message: 'Database query failed' });
+  }
+  // results를 배열로 반환합니다.
+  res.json({ success: true, data: results });
+});
+})
+
 module.exports = router;
