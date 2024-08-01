@@ -250,4 +250,36 @@ router.get("/members", (req, res) => {
   }
 });
 
+router.post("/teamM",(req,res)=>{
+  const { teamId } = req.body; 
+  const sql = `SELECT
+    user_age,
+    user_height,
+    user_weight,
+    user_shooting,
+    user_passing,
+    user_dribbling,
+    user_speed,
+    user_defending,
+    user_goalkeeping,
+    user_position,
+    team_id
+FROM
+    userInfo
+WHERE
+    team_id = ?
+ORDER BY
+    user_score DESC;
+`
+conn.query(sql,[teamId],(err,results)=>{
+  if (err) {
+    console.error('Database query error:', err);
+    return res.status(500).json({ success: false, message: 'Database query failed' });
+  }
+  // results를 배열로 반환합니다.
+  res.json({ success: true, data: results });
+});
+})
+
+
 module.exports = router;

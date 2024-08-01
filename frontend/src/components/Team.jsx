@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { TeamInfo } from "../TeamInfo";
 import axios from "../axios";
 import { UserInfo } from "../UserInfo";
@@ -8,9 +8,31 @@ import TeamApply from "./TeamApply";
 import TeamMembers from "./TeamMembers";
 import "../css/team.css";
 import { Button } from "react-bootstrap";
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js';
+import "../css/mypage.css";
+
+// Chart.js 구성 요소 등록
+ChartJS.register(
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const Team = () => {
   const { teamId } = useParams(); // URL 파라미터에서 teamId를 가져옴
+  const navigate = useNavigate(); // useNavigate 훅 추가
 
   const {
     setTeamId,
@@ -31,12 +53,34 @@ const Team = () => {
     setTeamImg2,
     teamText,
     setTeamText,
+    userNickname,
+    setUserNickname,
+    userImg,
+    setUserImg,
+    userShooting,
+    setUserShooting,
+    userPassing,
+    setUserPassing,
+    userDribbling,
+    setUserDribbling,
+    userSpeed,
+    setUserSpeed,
+    userDefending,
+    setUserDefending,
+    userGoalkeeping,
+    setUserGoalkeeping,
+    userScore,
+    setUserScore,
   } = useContext(TeamInfo, UserInfo);
 
   const [userId, setUserId] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState(null);
   const [modalSize, setModalSize] = useState("lg");
+  
+const [userDataArray, setUserDataArray] = useState([]);
+
+const [joinRequestStatus, setJoinRequestStatus] = useState(null); // 팀원 가입 신청 상태 변수
 
   useEffect(() => {
     const fetchSessionData = async () => {
@@ -59,13 +103,13 @@ const Team = () => {
         const response = await axios.get("/team/teamInfo", {
           headers: {
             "x-session-id": sessionStorage.getItem("sessionId"),
-            params: {
-              teamId: teamId,
-            },
+          },
+          params: {
+            teamId: teamId,
           },
         });
         console.log("Team data:", response.data);
-
+    
         if (response.data.success) {
           const teamData = response.data.data;
           console.log("Team data success:", teamData);
@@ -79,7 +123,7 @@ const Team = () => {
           setTeamImg1(teamData.team_img1);
           setTeamImg2(teamData.team_img2);
           setTeamText(teamData.team_text);
-
+    
           console.log("Updated teamId:", teamData.team_id);
         } else {
           console.error("Failed to fetch team data:", response.data.message);
@@ -88,7 +132,7 @@ const Team = () => {
         console.error("Failed to fetch team data:", error);
       }
     };
-
+    
     const initialize = async () => {
       await fetchSessionData();
       await fetchTeamData();
@@ -124,6 +168,7 @@ const Team = () => {
 
       if (response.data.success) {
         console.log("Joined team successfully:", response.data.message);
+        setJoinRequestStatus("success")
         alert("가입신청이 완료되었습니다.");
       } else {
         alert("이미 가입 신청 하셨습니다.");
@@ -139,6 +184,105 @@ const Team = () => {
     setShowModal(true);
   };
   const handleCloseModal = () => setShowModal(false);
+
+  const data = {
+    labels: ['Score'],
+    datasets: [
+      {
+        label: 'Team Score',
+        data: [teamScore || 0], // DB에서 가져온 teamScore 값을 사용합니다.
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1,
+      },
+    ],
+  };
+  
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+      },
+      tooltip: {
+        callbacks: {
+          label: (tooltipItem) => `Score: ${tooltipItem.raw}`,
+        },
+      },
+    },
+    scales: {
+      x: {
+        beginAtZero: true,
+        title: {
+          display: true,
+        },
+      },
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Score',
+        },
+      },
+    },
+  };
+
+
+
+
+  const handleGoToWinRate = () => {
+    navigate(`/winrate/${teamId}`); // 승률 페이지로 이동
+  };
+  const sendToFlask = async (userDataArray) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/winrate", // Flask 서버의 엔드포인트 URL
+        userDataArray, // 전송할 데이터
+        {
+          headers: {
+            "x-session-id": sessionStorage.getItem("sessionId"),
+            "Content-Type": "application/json", // 데이터의 형식을 JSON으로 설정
+          },
+        }
+      );
+      console.log("Data sent to Flask successfully:", response.data);
+    } catch (error) {
+      console.error("Error sending data to Flask:", error);
+    }
+  };
+  const teamM = async()=>{
+    try {
+      const response = await axios.post(
+        "/team/teamM",
+        {
+          teamId: teamId
+        },
+        {
+          headers: {
+            "x-session-id": sessionStorage.getItem("sessionId"),
+          },
+        })
+        if (response.data.success) {
+          const userData = response.data.data;
+          console.log(userData);
+          setUserDataArray(userData);
+          sendToFlask(userData);
+        } else {
+          console.error("Failed to fetch user data:", response.data.message);
+        }
+    
+    }catch(error){
+      console.error("Request error:", error);
+    }
+  }
+  
+  useEffect(() => {
+   
+    teamM();
+
+},[navigate,joinRequestStatus]);
+
   return (
     <div className="container contai">
       <div className="leftSection">
@@ -178,14 +322,20 @@ const Team = () => {
           <Button className="team-btn" onClick={teamJoin}>
             가입 신청
           </Button>
+
+          <Button  // 승률 페이지로 이동하는 버튼
+            className="team-btn"
+            onClick={handleGoToWinRate}>
+            승률 비교
+          </Button>
+          
         </div>
 
         <div className="teamInfo mt-3">
           <h2>팀 점수</h2>
           <div>{teamScore}</div>
-          <div>
-            요기는 차트 구현-팀 가입은 스탯 안적어도 가입되게 하고 스탯창 적용은
-            마이페이지에서 셋팅해야 적용되게 적용
+          <div style={{ height: '200px' }}> {/* 차트의 높이를 설정합니다. */}
+            <Bar data={data} options={options} />
           </div>
         </div>
       </div>

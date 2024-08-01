@@ -6,7 +6,8 @@ import pandas as pd
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, resources={r"/*":{"origins":"http://localhost:3000"}})
+CORS(app)
+# CORS(app, resources={r"/*":{"origins":"http://localhost:3000"}})
 
 
 
@@ -40,9 +41,9 @@ model_df = joblib.load('./models/saved_df_model.pkl')
 # 모델 학습 순서 age  height_cm  weight_kg  pace  shooting  passing  dribbling  defending
 
 
-@app.route('/predict_at', methods=['POST'])
+@app.route('/Attacker', methods=['POST'])
 
-def predict_at():
+def Attacker():
     data = request.get_json()
     print('received data :', data)
     print('Headers:', request.headers)
@@ -55,7 +56,7 @@ def predict_at():
     missing_fields = [field for field in required_fields if field not in data]
 
     if missing_fields:
-        return jsonify({'error': f'Missing required fields : {','.join(missing_fields)}'}), 400
+        return jsonify({'error': f'Missing required fields : {",".join(missing_fields)}'}), 400
     
     try:
         input_data = [data[field] for field in required_fields]
@@ -91,9 +92,9 @@ def predict_at():
         print(f"Error db inserting prediction result: {e}")
         return jsonify({'error': 'Failed to update user score'}), 500
 
-@app.route('/predict_df', methods=['POST'])
+@app.route('/Defender', methods=['POST'])
 
-def predict_df():
+def Defender():
     data = request.get_json()
     print('received data :', data)
 
@@ -105,12 +106,12 @@ def predict_df():
     missing_fields = [field for field in required_fields if field not in data]
 
     if missing_fields:
-        return jsonify({'error': f'Missing required fields : {','.join(missing_fields)}'}), 400
+        return jsonify({'error': f'Missing required fields : {",".join(missing_fields)}'}), 400
+    
     
     try:
         input_data = [float(data[field]) for field in required_fields]
-        input_data = np.array(input_data).reshape(1,-1)
-
+        input_data = np.array(input_data).reshape(1,-1)        
         input_data_df = pd.DataFrame(input_data, columns=required_fields)
         input_data_df.rename(columns={i:j for i,j in zip(required_fields,rename_fields)},inplace=True)
     except ValueError as e:
@@ -119,7 +120,7 @@ def predict_df():
 
     prediction_df = model_df.predict(input_data_df)
     prediction_df_value = round(prediction_df[0])
-    user_id = data['user_id']
+    user_id = data['userId']
     print(user_id)
 
 
@@ -132,17 +133,95 @@ def predict_df():
             user_id
         ))       
         db.commit()
-
+        return jsonify({'prediction_df': prediction_df_value}), 200
 
     except Exception as e:
         db.rollback()
         print(f"Error db inserting prediction result: {e}")
         return jsonify({'prediction_df' : prediction_df_value}),200
 
+@app.route('/winrate', methods=['POST'])
 
+def winrate():
+    try:
+        data = request.get_json()
+        print('received data :', data)
+        
+        required_fields = ['user_age','user_height','user_weight','user_speed','user_shooting','user_passing','user_dribbling','user_defending','user_position']
+        required_fields_data = ['user_age','user_height','user_weight','user_speed','user_shooting','user_passing','user_dribbling','user_defending']
+        avg_score_at = {}
+        avg_score_df = {}
+        count1 = 0
+        count2 = 0
+        for _ in range(len(required_fields_data)):
+            avg_score_at[required_fields_data[_]] = 0
+            avg_score_df[required_fields_data[_]] = 0
+        rename_fields = ['age', 'height_cm', 'weight_kg', 'pace', 'shooting', 'passing', 'dribbling', 'defending']
+        for i in data:
+            missing_fields = [field for field in required_fields if field not in i]
+            if missing_fields:
+                return jsonify({'error': f'Missing required fields : {",".join(missing_fields)}'}), 400
+            if i['user_position'] == 'Attacker':
+                count1 += 1
+            else:
+                count2 += 1
+            
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'An internal server error occurred'}), 500
+    try:
+        count = 0
 
+        for j in data:
+            count += 1
+            input_datas = [float(j[field]) for field in required_fields_data]
+            for k in range(len(input_datas)):
+                if j['user_position'] == 'Attacker':
+                    avg_score_at[required_fields_data[k]] += input_datas[k]
+                else:
+                    avg_score_df[required_fields_data[k]] += input_datas[k]
+        for avg_i in required_fields_data:
+            avg_score_at[avg_i] //= count1
+            avg_score_df[avg_i] //= count2
 
+        avg_score_data_at = pd.DataFrame([avg_score_at])
+        avg_score_data_df = pd.DataFrame([avg_score_df])
+        
+        avg_score_data_at.rename(columns={i:j for i,j in zip(required_fields_data,rename_fields)},inplace=True)
+        avg_score_data_df.rename(columns={i:j for i,j in zip(required_fields_data,rename_fields)},inplace=True)
 
+    except ValueError as e:
+        print(f'ValueError: {e}')
+        return jsonify({'error' : 'Invalid data format'}), 400
+
+    prediction_at_team = model_at.predict(avg_score_data_at)
+    prediction_at_team_value = prediction_at_team[0]
+
+    prediction_df_team = model_df.predict(avg_score_data_df)
+    prediction_df_team_value = prediction_df_team[0]
+    prediction_team_value = (prediction_df_team_value + prediction_at_team_value)//2
+    team_id = data[0]['team_id']
+
+    try:
+        outputquery = """UPDATE teamInfo 
+        SET  team_score = %s
+        WHERE team_id = %s"""
+        cursor.execute(outputquery, (
+            round(prediction_team_value),
+            team_id
+        ))
+        db.commit()
+
+        return jsonify({'prediction_at': prediction_team_value}), 200
+
+    except Exception as e:
+        db.rollback()
+        print(f"Error db inserting prediction result: {e}")
+        return jsonify({'error': 'Failed to update user score'}), 500
+    
+    
+    
+    
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=5000)
