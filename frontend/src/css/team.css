@@ -1,9 +1,6 @@
-.container {
+.team-container {
     justify-content: space-between;
     padding: 45px;
-}
-
-.contai {
     display: flex;
     font-weight: bold;
 }
@@ -48,6 +45,7 @@
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
+    border-radius: 35px;
 }
 
 .teamName {

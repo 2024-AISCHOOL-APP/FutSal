@@ -218,75 +218,77 @@ const Team = () => {
   };
 
   return (
-    <div className="container contai">
-      <div className="leftSection">
-        <div className="teamInfo">
-          <div className="teamIconName">
-            <div className="teamIcon">
-              <img
-                src={process.env.PUBLIC_URL + "/profileIcon.png"}
-                width="150px"
-                alt="profile-icon"
-              />
+    <div className="container">
+      <div className="team-container">
+        <div className="leftSection">
+          <div className="teamInfo">
+            <div className="teamIconName">
+              <div className="teamIcon">
+                <img
+                  src={process.env.PUBLIC_URL + "/profileIcon.png"}
+                  width="150px"
+                  alt="profile-icon"
+                />
+              </div>
+              <div className="teamName">
+                <h3>{teamName}</h3>
+              </div>
             </div>
-            <div className="teamName">
-              <h3>{teamName}</h3>
+            <div className="teamDetails">
+              <div>◾️ 팀 ID: {teamId}</div>
+              <div>◾️ 팀 지역: {teamArea}</div>
+              <div>◾️ 팀 기록: {teamRecord}</div>
             </div>
+            <Button
+              className="team-btn"
+              onClick={() =>
+                handleShowModal(<TeamMembers teamId={teamId} />, "xl")
+              }
+            >
+              팀원 목록
+            </Button>
+            <Button
+              className="team-btn"
+              onClick={() => handleShowModal(<TeamApply teamId={teamId} />)}
+            >
+              신청 목록
+            </Button>
+            <Button className="team-btn" onClick={teamJoin}>
+              가입 신청
+            </Button>
           </div>
-          <div className="teamDetails">
-            <div>◾️ 팀 ID: {teamId}</div>
-            <div>◾️ 팀 지역: {teamArea}</div>
-            <div>◾️ 팀 기록: {teamRecord}</div>
+
+          <div className="teamInfo mt-3">
+            <div style={{ height: '150px' }}> {/* 차트의 높이를 설정합니다. */}
+              <Bar data={data} options={options} />
+            </div>
+            <h3>Team Score : {teamScore}</h3>
+
+            <Button  // 승률 페이지로 이동하는 버튼
+              className="team-btn"
+              onClick={handleGoToWinRate}>
+              승률 비교
+            </Button>
+
           </div>
-          <Button
-            className="team-btn"
-            onClick={() =>
-              handleShowModal(<TeamMembers teamId={teamId} />, "xl")
-            }
+        </div>
+
+        <div className="rightSection">
+          <div className="teamImagesAndText">
+            <div className="teamImages">
+              <img src={"/ggami.jpg"} alt="팀 이미지 1" />
+              <img src={"/myTeam.png"} alt="팀 이미지 2" />
+            </div>
+            <div className="teamText">{teamText}</div>
+          </div>
+          <ModalComponent
+            show={showModal}
+            handleClose={handleCloseModal}
+            size={modalSize}
           >
-            팀원 목록
-          </Button>
-          <Button
-            className="team-btn"
-            onClick={() => handleShowModal(<TeamApply teamId={teamId} />)}
-          >
-            신청 목록
-          </Button>
-          <Button className="team-btn" onClick={teamJoin}>
-            가입 신청
-          </Button>
+            {modalContent}
+          </ModalComponent>
         </div>
-
-        <div className="teamInfo mt-3">
-          <div style={{ height: '150px' }}> {/* 차트의 높이를 설정합니다. */}
-            <Bar data={data} options={options} />
-          </div>
-          <h3>Team Score : {teamScore}</h3>
-
-          <Button  // 승률 페이지로 이동하는 버튼
-            className="team-btn"
-            onClick={handleGoToWinRate}>
-            승률 비교
-          </Button>
-
-        </div>
-      </div>
-
-      <div className="rightSection">
-        <div className="teamImagesAndText">
-          <div className="teamImages">
-            <img src={"/ggami.jpg"} alt="팀 이미지 1" />
-            <img src={"/myTeam.png"} alt="팀 이미지 2" />
-          </div>
-          <div className="teamText">{teamText}</div>
-        </div>
-        <ModalComponent
-          show={showModal}
-          handleClose={handleCloseModal}
-          size={modalSize}
-        >
-          {modalContent}
-        </ModalComponent>
       </div>
     </div>
   );

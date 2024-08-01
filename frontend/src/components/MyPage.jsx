@@ -14,6 +14,7 @@ import {
   Filler,
 } from "chart.js";
 import "../css/mypage.css";
+import Button from "react-bootstrap/esm/Button";
 
 // Chart.js 구성 요소 등록
 ChartJS.register(
@@ -174,60 +175,62 @@ const MyPage = () => {
   };
 
   return (
-    <div id="mypage_container">
-      <div id="mypage_container_left">
-        <div id="mypage_container_left_up">
-          <div id="mypage_container_logo_box">
-            <img
-              src={
-                userImg
-                  ? `${process.env.PUBLIC_URL}${userImg}`
-                  : `${process.env.PUBLIC_URL}/image/userImage/default_profile.png`
-              }
-              alt="User Icon"
-            />
+    <div className="container">
+      <div className="mypage_container">
+        <div id="mypage_container_left">
+          <div id="mypage_container_left_up">
+            <div id="mypage_container_logo_box">
+              <img
+                className="mp-img"
+                src={
+                  userImg
+                    ? `${process.env.PUBLIC_URL}${userImg}`
+                    : `${process.env.PUBLIC_URL}/image/userImage/default_profile.png`
+                }
+                alt="User Icon"
+              />
+            </div>
+
+            <div id="mypage_links">
+              <br />
+              <Button onClick={() => nav('/teampage')} className="mypage-link">
+                팀페이지
+              </Button>
+              <Button onClick={showUpdatePage} className="mypage-link">
+                회원정보 수정하기
+              </Button>
+              <Button onClick={showSelfStatsPage} className="mypage-link">
+                능력치 등록
+              </Button>
+            </div>
           </div>
 
-          <div id="mypage_links">
-            <br />
-            <Link to="/teampage" className="mypage-link">
-              팀페이지
-            </Link>
-            <button onClick={showUpdatePage} className="mypage-link">
-              회원정보 수정하기
-            </button>
-            <button onClick={showSelfStatsPage} className="mypage-link">
-              능력치 등록
-            </button>
-          </div>
-        </div>
-
-        <div id="mypage_container_left_down">
-          <div id="mypage_container_left_down_box">
-              <p>User Score: {userScore}</p>
-            <div id="mypage_container_left_down_hex">
-              <Radar data={data} options={options} />
+          <div id="mypage_container_left_down">
+            <div id="mypage_container_left_down_box">
+              <div id="mypage_container_left_down_hex">
+                <Radar data={data} options={options} />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div id="mypage_container_right">
-        {currentPage === "default" && (
-          <div className="right-content">
-            <h2>마이페이지</h2>
-            <p>왼쪽 메뉴에서 원하는 항목을 선택하세요.</p>
-          </div>
-        )}
-        {currentPage === "update" && (
-          <div className="right-content">
-            <Update />
-          </div>
-        )}
-        {currentPage === "selfstats" && (
-          <div className="right-content">
-            <SelfStats />
-          </div>
-        )}
+        <div id="mypage_container_right">
+          {currentPage === "default" && (
+            <div className="right-content">
+              <h2>마이페이지</h2>
+              <p>왼쪽 메뉴에서 원하는 항목을 선택하세요.</p>
+            </div>
+          )}
+          {currentPage === "update" && (
+            <div className="right-content">
+              <Update />
+            </div>
+          )}
+          {currentPage === "selfstats" && (
+            <div className="right-content">
+              <SelfStats />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

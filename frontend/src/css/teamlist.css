@@ -1,11 +1,50 @@
-/* .pagination {
+.tl-pagination-info {
+    display: inline-block;
+    margin: 0 10px;
+    align-self: center;
+}
+
+.tl-pagination {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 20px;
+    gap: 10px;
 }
 
-.pagination-info {
-    margin: 0 10px;
+.tl-pagination-info {
+    font-size: 1.1em;
     font-weight: bold;
-} */
+}
+
+.tl-pagination-buttons {
+    padding: 10px 20px;
+    background-color: #80e5a8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.tl-pagination-buttons:hover {
+    background-color: #66d09d;
+}
+
+.tl-pagination-buttons:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.tl-container {
+    padding: 45px;
+}
+
+.tl-container .tl-thead {
+    --bs-table-bg: #effbef;
+}
+
+.table {
+    --bs-table-striped-bg: white;
+}

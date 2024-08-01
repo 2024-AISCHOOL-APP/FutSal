@@ -159,7 +159,7 @@ const Board = () => {
             <th>작성일</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="b-tbody">
           {filteredPosts.length > 0 ? (
             filteredPosts.map((post) => (
               <tr
