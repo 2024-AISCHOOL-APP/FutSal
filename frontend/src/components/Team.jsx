@@ -282,7 +282,7 @@ const Team = () => {
             <div className="teamIconName">
               <div className="teamIcon">
                 <img
-                  src={process.env.PUBLIC_URL + "/profileIcon.png"}
+                  src={teamIcon}
                   width="150px"
                   alt="profile-icon"
                 />

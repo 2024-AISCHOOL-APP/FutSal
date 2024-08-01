@@ -16,6 +16,8 @@
 .board-title {
   width: 80%; /* .board-container 길이의 80%로 설정 */
   margin: 0 auto;
+  min-width: 768px; /* 최소 가로 길이를 768px로 설정 */
+  text-align: left;
 }
 .button-group {
   width: 80%; /* .board-container 길이의 80%로 설정 */
@@ -27,11 +29,15 @@
   text-align: right;
   width: 80%; /* .board-container 길이의 80%로 설정 */
   margin: 0 auto;
+  display: flex;
+  justify-content: flex-end; /* 오른쪽에 붙도록 설정 */
 }
 
 .board-content {
   width: 80%; /* .board-container 길이의 80%로 설정 */
   margin: 0 auto;
+  min-width: 768px; /* 최소 가로 길이를 768px로 설정 */
+  min-height: 40%;
 }
 
 .b-form-row {
@@ -193,14 +199,8 @@
 }
 /* 스트라이프 효과의 색상과 배경색을 투명으로 설정 */
 
-/* .b-table-bordered > :not(caption) > * > * {
+.b-table-bordered > :not(caption) > * > * {
   border-width: 0;
-} */
-
-tbody, td, tfoot, th,  tr {
-  border-color: white;
-  border-width: 0;
-  border-style: none;
 }
 /* 구분선 삭제 */
 
@@ -269,15 +269,6 @@ tbody, td, tfoot, th,  tr {
   border-top: 1px solid #dee2e6;
   display: flex;
   justify-content: flex-end;
-}
-
-.btn-primary {
-  --bs-btn-color: #fff;
-  --bs-btn-bg: #80E5A8;
-  --bs-btn-border-color: #80E5A8;
-  --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: #66d09d;
-  --bs-btn-hover-border-color: #66d09d;
 }
 
 .b-board-detail-card .b-modal-title {
