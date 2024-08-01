@@ -26,12 +26,18 @@ router.post("/handleCreateTeam", (req, res) => {
 // 팀 정보 가져오기
 router.get("/teamInfo", (req, res) => {
   try {
-    const team_id = req.query.teamId;
+    // team_id와 teamId를 모두 확인
+    const teamId = req.query.teamId || req.query.team_id;
+    console.log(teamId);
+
+    if (!teamId) {
+      return res.status(400).json({ success: false, message: "팀 ID가 제공되지 않았습니다." });
+    }
 
     const sql = `
       SELECT * FROM teamInfo WHERE team_id = ?
     `;
-    conn.query(sql, [team_id], (err, results) => {
+    conn.query(sql, [teamId], (err, results) => {
       if (err) {
         console.error("Database error:", err);
         return res

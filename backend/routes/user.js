@@ -81,8 +81,14 @@ router.post("/handleSignIn", async (req, res) => {
       if (match) {
         console.log("로그인 성공");
         const sessionId = new Date().getTime().toString(); // 간단한 세션 ID 생성
-        sessionStore[sessionId] = { user: rows[0] };
-        res.json({ success: true, sessionId });
+        sessionStore.set(sessionId, { user: rows[0] }, (err) => {
+          if (err) {
+            console.error("세션 저장 오류:", err);
+            return res.status(500).json({ success: false, message: "Failed to save session" });
+          }
+          console.log("세션 저장:", { user: rows[0] }); // 세션 저장 로그
+          res.json({ success: true, sessionId });
+        });
       } else {
         console.log("로그인 실패: 비밀번호 불일치");
         res.json({ success: false, message: "Invalid credentials" });
