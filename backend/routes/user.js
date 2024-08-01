@@ -141,12 +141,10 @@ router.post("/handleSignUp", async (req, res) => {
     );
   } catch (err) {
     console.error("Error during password hashing:", err);
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Error occurred during sign-up process",
-      });
+    res.status(500).json({
+      success: false,
+      message: "Error occurred during sign-up process",
+    });
   }
 });
 
@@ -378,6 +376,26 @@ router.post("/password-reset", (req, res) => {
 
       res.json({ success: true });
     });
+  });
+});
+
+router.post("/goUserTeam", (req, res) => {
+  const { userId } = req.body; // req.body에서 userId를 추출
+  const sql = "SELECT team_Id FROM userInfo WHERE user_Id = ?;";
+
+  conn.query(sql, [userId], (err, results) => {
+    if (err) {
+      console.error("SQL Error:", err);
+      return res
+        .status(500)
+        .json({ success: false, message: "Database error occurred" });
+    }
+    if (results.length === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Team not found" });
+    }
+    res.json({ success: true, teamId: results[0].team_Id });
   });
 });
 module.exports = router;

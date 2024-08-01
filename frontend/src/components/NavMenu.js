@@ -23,6 +23,31 @@ const NavMenu = () => {
     };
   }, []);
 
+  const goUserTeam = async () => {
+    try {
+      const response = await axios.post(
+        "/user/goUserTeam",
+        {
+          userId: sessionStorage.getItem("userId"),
+        },
+        {
+          headers: {
+            "x-session-id": sessionStorage.getItem("sessionId"),
+          },
+        }
+      );
+
+      if (response.data.success) {
+        const teamId = response.data.teamId;
+        nav(`/team/${teamId}`); // 팀 페이지로 이동
+      } else {
+        alert("Failed to get team information.");
+      }
+    } catch (error) {
+      console.error("Error fetching team information:", error);
+    }
+  };
+
   const handleLogout = async () => {
     try {
       const sessionId = sessionStorage.getItem("sessionId");
@@ -73,9 +98,7 @@ const NavMenu = () => {
               게시판
             </Link>
             <NavDropdown title="팀" id="navbarScrollingDropdown">
-              <NavDropdown.Item onClick={() => nav("/team")}>
-                마이 팀
-              </NavDropdown.Item>
+              <NavDropdown.Item onClick={goUserTeam}>마이 팀</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item onClick={() => nav("/teamlist")}>
                 팀 찾기

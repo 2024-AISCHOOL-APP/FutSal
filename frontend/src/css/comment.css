@@ -1,13 +1,24 @@
-.commentBox {
-    border: none;
+/* comment.css */
+.comment-container {
+  width: 80%;
+  padding: 20px;
+  margin: auto;
+  box-sizing: border-box;
 }
 
-.card {
-    --bs-card-spacer-y: 1rem;
-    --bs-card-spacer-x: 1rem;
-    --bs-card-title-spacer-y: 0.5rem;
-    --bs-card-title-color: ;
-    --bs-card-subtitle-color: ;
-    --bs-card-border-width: var(--bs-border-width);
-    --bs-card-border-color: var(--bs-border-color-translucent);
+.comment-list {
+  margin-bottom: 20px;
+}
+
+.commentBox {
+  margin: auto;
+  text-align: left;
+}
+
+.commentBox .card-body {
+  text-align: left;
+}
+
+.comment-text {
+  text-align: left;
 }
