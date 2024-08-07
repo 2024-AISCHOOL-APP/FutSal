@@ -1,4 +1,4 @@
-# 📎 꽃 보러 갈래?(팀명: 아름답조)
+# 📎 폼인풋살 (form input 살)
 ![image](https://user-images.githubusercontent.com/25995055/178401309-2a2ffc86-ef45-439b-bfd8-6978312100bc.png)
 
 
