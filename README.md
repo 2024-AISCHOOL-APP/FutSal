@@ -73,12 +73,12 @@
 </table>
 <br>
 
-## 📌 SW유스케이스
-![image](https://github.com/user-attachments/assets/62c1f357-e4d8-4bbd-baae-2f3a7a168087)
+## 📌 시스템 아키텍처
+![image](https://github.com/user-attachments/assets/f9fee7dc-3166-40d9-97d6-aa5d4c0b07ae)
 <br>
 
-## 📌 서비스 흐름도
-![image](https://user-images.githubusercontent.com/25995055/178401048-d6484bda-a2d7-40e1-998b-2bd195cd9f89.png)
+## 📌 SW유스케이스
+![image](https://github.com/user-attachments/assets/62c1f357-e4d8-4bbd-baae-2f3a7a168087)
 <br>
 
 ## 📌 ER다이어그램
