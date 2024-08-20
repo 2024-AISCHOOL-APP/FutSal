@@ -88,21 +88,12 @@
 <br>
 
 ## 📌 ER다이어그램
-![image](https://user-images.githubusercontent.com/25995055/169925318-102784c2-893f-4fd7-bec9-a54c44b669d4.png)
+![image](https://github.com/user-attachments/assets/eefe9cff-90e0-4cf7-9fe8-d476212a4a63)
 <br>
 
 ## 🖥 화면 구성
 
-### 로그인/회원가입/회원괸리/회원수정/회원탈퇴
-![image](https://user-images.githubusercontent.com/25995055/178401098-95f15a0e-a2de-415e-83d5-883bb4cb0656.png)
-<br>
-
-### 옷 정보/코디 추천(날씨, 팁, 오늘의 코디, 참고할 수 있는 코디)
-![image](https://user-images.githubusercontent.com/25995055/178401127-287e6de2-4396-49fc-a107-59c4d5cd55c7.png)
-<br>
-
-### 일정/고객센터
-![image](https://user-images.githubusercontent.com/25995055/178401150-861f0e93-0f40-4fae-98c1-2099bf513c8d.png)
+###
 <br>
 
 ## 👨‍👩‍👦‍👦 팀원 역할
@@ -142,7 +133,12 @@
 프로젝트 진행하는 동안 발생했던 이슈 중 가장 기억에 남았던 문제와 해결 프로세스 나열(2~5가지 정도)
   
 * 문제1<br>
+문제 : 특정 axios 요청의 주소를 인식 못하는 오류 (대부분의 axios 요청은 문제없이 주소값을 찾았으나 특정 주소값만 인식하지 못함)
 
- 
+해결 : "proxy:http://localhost:8000" 클라이언트에서 보내주는 요청에 대한 주소값을 제대로 찾을 수 있도록 프록시 설정 
+    
 * 문제2<br>
+문제 : Flask 서버 요청 시 오류 (Flask 서버 요청 시 cors 설정, Front에서 Flask로 요청을 통해 데이터가 넘어갈 때 set 타입으로 넘어가 json인식 불가)
+
+해결 : Context - Type 헤더 지정, front에서 보내는 데이터 헤더 부분에 context-type을 json형식으로 반환하여 요청을 보내고 Flask에서 응답으로 데이터를 보낼 떄 key : value값을 설정하여 객체 타입으로 응답
 
