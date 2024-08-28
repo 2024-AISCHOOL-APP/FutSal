@@ -73,8 +73,7 @@
 </table>
 <br>
 ## 화면구성
-![image](https://github.com/user-attachments/assets/f0d60f25-2f23-4437-8bf2-2767f0ca89b5)
-
+![image](https://github.com/user-attachments/assets/183e785e-66d9-4aeb-a6b9-60aafb70b9ee)
 <br>
 
 ## 📌 시스템 아키텍처
